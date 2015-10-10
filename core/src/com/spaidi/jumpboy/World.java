@@ -10,19 +10,31 @@ import com.badlogic.gdx.utils.Array;
 import com.spaidi.jumpboy.actors.blocks.BlockBase;
 import com.spaidi.jumpboy.actors.jumpboy.JumpBoy;
 import com.spaidi.jumpboy.actors.levels.Level;
+import com.spaidi.jumpboy.constants.Scores;
+import com.spaidi.jumpboy.hud.Hud;
 import com.spaidi.jumpboy.utils.levelloader.LevelLoader;
 
 public class World {
 
-	/** Our player controlled hero **/
-	JumpBoy jumpBoy;
-	/** A world has a level through which Bob needs to go through **/
-	Level level;
+	private JumpBoy jumpBoy;
+	private Level level;
+	private Hud hud;
 
-	/** The collision boxes **/
 	Array<Rectangle> collisionRects = new Array<Rectangle>();
 
-	// Getters -----------
+	public World() {
+		createDemoWorld();
+	}
+
+	private void createDemoWorld() {
+		try {
+			level = LevelLoader.loadLevel("tmp_level");
+			jumpBoy = new JumpBoy(level.getStartPosition());
+			hud = new Hud();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public Array<Rectangle> getCollisionRects() {
 		return collisionRects;
@@ -36,9 +48,12 @@ public class World {
 		return level;
 	}
 
+	public Hud getHud() {
+		return hud;
+	}
+
 	private final List<BlockBase> blocks = new ArrayList<BlockBase>(20);
 
-	/** Return only the blocks that need to be drawn **/
 	public List<BlockBase> getDrawableBlocks(BlockBase[][] allBlocks) {
 		Vector2 xBound = getVisibleXBounds();
 		Vector2 yBound = getVisibleYBounds();
@@ -69,21 +84,21 @@ public class World {
 		return new Vector2(y, y2);
 	}
 
-	// --------------------
-	public World() {
-		createDemoWorld();
+	public void respawnJumpBoy() {
+		jumpBoy.setStartPosition(level.getStartPosition());
 	}
 
-	private void createDemoWorld() {
-		try {
-			level = LevelLoader.loadLevel("tmp_level");
-			jumpBoy = new JumpBoy(level.getStartPosition());
-		} catch (IOException e) {
-			e.printStackTrace();
+	public void killJumpBoy() {
+		hud.getLives().takeLive();
+		if (hud.getLives().hasLives()) {
+			hud.getScore().takePoints(Scores.GAIN_LOST_LIVE.getPoints());
+			respawnJumpBoy();
+		} else {
+			showGameOverScreen();
 		}
 	}
 
-	public void respawnJumpBoy() {
-		jumpBoy.setStartPosition(level.getStartPosition());
+	private void showGameOverScreen() {
+		System.out.println("GAME OVER");
 	}
 }

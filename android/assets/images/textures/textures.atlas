@@ -11,56 +11,56 @@ block
   orig: 48, 48
   offset: 0, 0
   index: -1
-bob-01
+jump-boy-01
   rotate: false
   xy: 725, 89
   size: 24, 28
   orig: 24, 28
   offset: 0, 0
   index: -1
-bob-02
+jump-boy-02
   rotate: false
   xy: 52, 22
   size: 24, 28
   orig: 24, 28
   offset: 0, 0
   index: -1
-bob-03
+jump-boy-03
   rotate: false
   xy: 777, 91
   size: 24, 26
   orig: 24, 26
   offset: 0, 0
   index: -1
-bob-04
+jump-boy-04
   rotate: false
   xy: 104, 24
   size: 24, 26
   orig: 24, 26
   offset: 0, 0
   index: -1
-bob-05
+jump-boy-05
   rotate: false
   xy: 725, 59
   size: 24, 28
   orig: 24, 28
   offset: 0, 0
   index: -1
-bob-06
+jump-boy-06
   rotate: false
   xy: 751, 89
   size: 24, 28
   orig: 24, 28
   offset: 0, 0
   index: -1
-bob-down
+jump-boy-down
   rotate: false
   xy: 78, 22
   size: 24, 28
   orig: 24, 28
   offset: 0, 0
   index: -1
-bob-up
+jump-boy-up
   rotate: false
   xy: 751, 59
   size: 24, 28

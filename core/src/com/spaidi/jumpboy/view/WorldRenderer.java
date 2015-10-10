@@ -21,8 +21,8 @@ import com.spaidi.jumpboy.actors.jumpboy.JumpBoy.State;
 
 public class WorldRenderer {
 
-	private static final float CAMERA_WIDTH = 12f;
-	private static final float CAMERA_HEIGHT = 8.4f;
+	private static final float CAMERA_WIDTH = 10f;
+	private static final float CAMERA_HEIGHT = 7f;
 	private static final float RUNNING_FRAME_DURATION = 0.06f;
 
 	private World world;
@@ -41,12 +41,14 @@ public class WorldRenderer {
 	private TextureRegion jumpBoyJumpRight;
 	private TextureRegion jumpBoyFallRight;
 	private Array<AtlasRegion> fireTexture;
+	private TextureRegion liveTexture;
 
 	/** Animations **/
 	private Animation walkLeftAnimation;
 	private Animation walkRightAnimation;
 
 	private SpriteBatch spriteBatch;
+	private SpriteBatch hudSpriteBatch;
 	private boolean debug = false;
 
 	private long currentRedraw = 0;
@@ -78,19 +80,21 @@ public class WorldRenderer {
 			debugRenderer = new ShapeRenderer();
 		}
 		spriteBatch = new SpriteBatch();
+		hudSpriteBatch = new SpriteBatch();
 		loadTextures();
 	}
 
 	private void loadTextures() {
 		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("images/textures/textures.atlas"));
-		jumpBoyIdleLeft = atlas.findRegion("bob-01");
+		jumpBoyIdleLeft = atlas.findRegion("jump-boy-01");
 		jumpBoyIdleRight = new TextureRegion(jumpBoyIdleLeft);
 		jumpBoyIdleRight.flip(true, false);
 		blockTexture = atlas.findRegion("block");
 		fireTexture = atlas.findRegions("fire");
+		liveTexture = atlas.findRegion("heart");
 		TextureRegion[] walkLeftFrames = new TextureRegion[5];
 		for (int i = 0; i < 5; i++) {
-			walkLeftFrames[i] = atlas.findRegion("bob-0" + (i + 2));
+			walkLeftFrames[i] = atlas.findRegion("jump-boy-0" + (i + 2));
 		}
 		walkLeftAnimation = new Animation(RUNNING_FRAME_DURATION, walkLeftFrames);
 
@@ -101,10 +105,10 @@ public class WorldRenderer {
 			walkRightFrames[i].flip(true, false);
 		}
 		walkRightAnimation = new Animation(RUNNING_FRAME_DURATION, walkRightFrames);
-		jumpBoyJumpLeft = atlas.findRegion("bob-up");
+		jumpBoyJumpLeft = atlas.findRegion("jump-boy-up");
 		jumpBoyJumpRight = new TextureRegion(jumpBoyJumpLeft);
 		jumpBoyJumpRight.flip(true, false);
-		jumpBoyFallLeft = atlas.findRegion("bob-down");
+		jumpBoyFallLeft = atlas.findRegion("jump-boy-down");
 		jumpBoyFallRight = new TextureRegion(jumpBoyFallLeft);
 		jumpBoyFallRight.flip(true, false);
 	}
@@ -116,6 +120,7 @@ public class WorldRenderer {
 		}
 		cam.position.set(world.getJumpBoy().getPosition().x, world.getJumpBoy().getPosition().y, 0);
 		cam.update();
+		drawHud();
 		drawBlocks();
 		drawGround();
 		drawJumpBoy();
@@ -123,6 +128,20 @@ public class WorldRenderer {
 			drawCollisionBlocks();
 			drawDebug();
 		}
+	}
+
+	private void drawHud() {
+		hudSpriteBatch.begin();
+		int livesNumber = world.getHud().getLives().getLivesNumber();
+		float heartScale = 0.5f;
+		float heartWidth = liveTexture.getRegionWidth() * heartScale;
+		float heartHeight = liveTexture.getRegionHeight() * heartScale;
+		for (int live = 0; live < livesNumber; live++) {
+			System.out.println(height);
+			hudSpriteBatch.draw(liveTexture, live * heartWidth, 480 - heartHeight, heartWidth, heartHeight);
+
+		}
+		hudSpriteBatch.end();
 	}
 
 	private void drawBlocks() {

@@ -47,7 +47,7 @@ public class WorldController {
 		keys.put(Keys.FIRE, false);
 	};
 
-	// Blocks that Bob can collide with any given frame
+	// Blocks that JumpBoy can collide with any given frame
 	private Array<Block> collidable = new Array<Block>();
 
 	public WorldController(World world) {
@@ -92,10 +92,10 @@ public class WorldController {
 
 	/** The main update method **/
 	public void update(float delta) {
-		// Processing the input - setting the states of Bob
+		// Processing the input - setting the states of JumpBoy
 		processInput();
 
-		// If Bob is grounded then reset the state to IDLE
+		// If JumpBoy is grounded then reset the state to IDLE
 		if (grounded && jumpBoy.getState().equals(State.JUMPING)) {
 			jumpBoy.setState(State.IDLE);
 		}
@@ -109,12 +109,11 @@ public class WorldController {
 		// apply acceleration to change velocity
 		jumpBoy.getVelocity().add(jumpBoy.getAcceleration().x, jumpBoy.getAcceleration().y);
 
-		// checking collisions with the surrounding blocks depending on Bob's
-		// velocity
+		// checking collisions with the surrounding blocks depending on JumpBoy's velocity
 		checkCollisionWithBlocks(delta);
-		checkIfJumpBoyFallOnGround();
+		checkIfJumpBoyTouchTheGround();
 
-		// apply damping to halt Bob nicely
+		// apply damping to halt JumpBoy nicely
 		jumpBoy.getVelocity().x *= DAMP;
 
 		// ensure terminal velocity is not exceeded
@@ -132,12 +131,12 @@ public class WorldController {
 
 	}
 
-	private void checkIfJumpBoyFallOnGround() {
+	private void checkIfJumpBoyTouchTheGround() {
 		int endY = (int) (jumpBoy.getBounds().y + jumpBoy.getBounds().height);
 		if (endY <= 0) {
 			jumpBoy.getAcceleration().scl(0.0f);
 			jumpBoy.getVelocity().scl(0.0f);
-			world.respawnJumpBoy();
+			world.killJumpBoy();
 		}
 	}
 
@@ -147,15 +146,15 @@ public class WorldController {
 		jumpBoy.getVelocity().scl(delta);
 
 		// Obtain the rectangle from the pool instead of instantiating it
-		Rectangle bobRect = rectPool.obtain();
-		// set the rectangle to bob's bounding box
-		bobRect.set(jumpBoy.getBounds().x, jumpBoy.getBounds().y, jumpBoy.getBounds().width, jumpBoy.getBounds().height);
+		Rectangle jumpBoyRect = rectPool.obtain();
+		// set the rectangle to JumpBoy's bounding box
+		jumpBoyRect.set(jumpBoy.getBounds().x, jumpBoy.getBounds().y, jumpBoy.getBounds().width, jumpBoy.getBounds().height);
 
 		// we first check the movement on the horizontal X axis
 		int startX, endX;
 		int startY = (int) jumpBoy.getBounds().y;
 		int endY = (int) (jumpBoy.getBounds().y + jumpBoy.getBounds().height);
-		// if Bob is heading left then we check if he collides with the block on
+		// if JumpBoy is heading left then we check if he collides with the block on
 		// his left
 		// we check the block on his right otherwise
 		if (jumpBoy.getVelocity().x < 0) {
@@ -165,19 +164,19 @@ public class WorldController {
 					+ jumpBoy.getVelocity().x);
 		}
 
-		// get the block(s) bob can collide with
+		// get the block(s) JumpBoy can collide with
 		populateCollidableBlocks(startX, startY, endX, endY);
 
-		// simulate bob's movement on the X
-		bobRect.x += jumpBoy.getVelocity().x;
+		// simulate JumpBoy's movement on the X
+		jumpBoyRect.x += jumpBoy.getVelocity().x;
 
 		// clear collision boxes in world
 		world.getCollisionRects().clear();
 
-		// if bob collides, make his horizontal velocity 0
+		// if JumpBoy collides, make his horizontal velocity 0
 		for (Block block : collidable) {
 			if (block == null) continue;
-			if (bobRect.overlaps(block.getBounds())) {
+			if (jumpBoyRect.overlaps(block.getBounds())) {
 				jumpBoy.getVelocity().x = 0;
 				world.getCollisionRects().add(block.getBounds());
 				break;
@@ -185,7 +184,7 @@ public class WorldController {
 		}
 
 		// reset the x position of the collision box
-		bobRect.x = jumpBoy.getPosition().x;
+		jumpBoyRect.x = jumpBoy.getPosition().x;
 
 		// the same thing but on the vertical Y axis
 		startX = (int) jumpBoy.getBounds().x;
@@ -199,11 +198,11 @@ public class WorldController {
 
 		populateCollidableBlocks(startX, startY, endX, endY);
 
-		bobRect.y += jumpBoy.getVelocity().y;
+		jumpBoyRect.y += jumpBoy.getVelocity().y;
 
 		for (Block block : collidable) {
 			if (block == null) continue;
-			if (bobRect.overlaps(block.getBounds())) {
+			if (jumpBoyRect.overlaps(block.getBounds())) {
 				if (jumpBoy.getVelocity().y < 0) {
 					grounded = true;
 				}
@@ -213,9 +212,9 @@ public class WorldController {
 			}
 		}
 		// reset the collision box's position on Y
-		bobRect.y = jumpBoy.getPosition().y;
+		jumpBoyRect.y = jumpBoy.getPosition().y;
 
-		// update Bob's position
+		// update JumpBoy's position
 		// jumpBoy.getPosition().add(jumpBoy.getVelocity());
 		// jumpBoy.getBounds().x = jumpBoy.getPosition().x;
 		// jumpBoy.getBounds().y = jumpBoy.getPosition().y;
@@ -224,12 +223,11 @@ public class WorldController {
 		jumpBoy.getVelocity().scl(1 / delta);
 
 		// release rectangle back to pool
-		rectPool.free(bobRect);
+		rectPool.free(jumpBoyRect);
 	}
 
 	/**
-	 * populate the collidable array with the blocks found in the enclosing
-	 * coordinates
+	 * populate the collidable array with the blocks found in the enclosing coordinates
 	 **/
 	private void populateCollidableBlocks(int startX, int startY, int endX, int endY) {
 		collidable.clear();
@@ -242,7 +240,7 @@ public class WorldController {
 		}
 	}
 
-	/** Change Bob's state and parameters based on input controls **/
+	/** Change JumpBoy's state and parameters based on input controls **/
 	private boolean processInput() {
 		if (keys.get(Keys.JUMP)) {
 			if (!jumpBoy.getState().equals(State.JUMPING)) {
