@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import com.spaidi.jumpboy.actors.blocks.BlockBase;
 import com.spaidi.jumpboy.actors.jumpboy.JumpBoy;
 import com.spaidi.jumpboy.actors.levels.Level;
+import com.spaidi.jumpboy.constants.Messages;
 import com.spaidi.jumpboy.constants.Scores;
 import com.spaidi.jumpboy.hud.Hud;
 import com.spaidi.jumpboy.utils.levelloader.LevelLoader;
@@ -20,7 +21,8 @@ public class World {
 	private Level level;
 	private Hud hud;
 
-	Array<Rectangle> collisionRects = new Array<Rectangle>();
+	private Array<Rectangle> collisionRects = new Array<Rectangle>();
+	private Array<Messages> messages = new Array<Messages>();
 
 	public World() {
 		createDemoWorld();
@@ -50,6 +52,10 @@ public class World {
 
 	public Hud getHud() {
 		return hud;
+	}
+
+	public Array<Messages> getMessages() {
+		return messages;
 	}
 
 	private final List<BlockBase> blocks = new ArrayList<BlockBase>(20);
@@ -94,11 +100,11 @@ public class World {
 			hud.getScore().takePoints(Scores.GAIN_LOST_LIVE.getPoints());
 			respawnJumpBoy();
 		} else {
-			showGameOverScreen();
+			addGameMessage(Messages.GAME_OVER);
 		}
 	}
 
-	private void showGameOverScreen() {
-		System.out.println("GAME OVER");
+	private void addGameMessage(Messages msg) {
+		messages.add(msg);
 	}
 }

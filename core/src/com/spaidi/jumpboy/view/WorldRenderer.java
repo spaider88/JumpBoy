@@ -21,6 +21,7 @@ import com.spaidi.jumpboy.actors.blocks.Block;
 import com.spaidi.jumpboy.actors.blocks.BlockBase;
 import com.spaidi.jumpboy.actors.jumpboy.JumpBoy;
 import com.spaidi.jumpboy.actors.jumpboy.JumpBoy.State;
+import com.spaidi.jumpboy.constants.Messages;
 
 public class WorldRenderer {
 
@@ -138,10 +139,21 @@ public class WorldRenderer {
 		drawBlocks();
 		drawGround();
 		drawJumpBoy();
+		drawMessages();
 		if (debug) {
 			drawCollisionBlocks();
 			drawDebug();
 		}
+	}
+
+	private void drawMessages() {
+		hudSpriteBatch.begin();
+		for (Messages message : world.getMessages()) {
+			gameFont.draw(hudSpriteBatch, message.getMessage(), 320 - (calculateTextWidth(message.getMessage()) / 2),
+					240);
+		}
+		world.getMessages().clear();
+		hudSpriteBatch.end();
 	}
 
 	private void drawHud() {
@@ -229,5 +241,10 @@ public class WorldRenderer {
 		}
 		debugRenderer.end();
 
+	}
+
+	private int calculateTextWidth(String text) {
+		System.out.println(gameFont.getSpaceWidth());
+		return (int) (gameFont.getSpaceWidth() * text.length());
 	}
 }
