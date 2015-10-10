@@ -3,11 +3,14 @@ package com.spaidi.jumpboy.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
@@ -24,14 +27,11 @@ public class WorldRenderer {
 	private static final float CAMERA_WIDTH = 10f;
 	private static final float CAMERA_HEIGHT = 7f;
 	private static final float RUNNING_FRAME_DURATION = 0.06f;
+	private static final int FONT_SIZE = 20;
 
 	private World world;
 	private OrthographicCamera cam;
 
-	/** for debug rendering **/
-	private ShapeRenderer debugRenderer;
-
-	/** Textures **/
 	private TextureRegion jumpBoyIdleLeft;
 	private TextureRegion jumpBoyIdleRight;
 	private TextureRegion blockTexture;
@@ -42,11 +42,12 @@ public class WorldRenderer {
 	private TextureRegion jumpBoyFallRight;
 	private Array<AtlasRegion> fireTexture;
 	private TextureRegion liveTexture;
+	private BitmapFont gameFont;
 
-	/** Animations **/
 	private Animation walkLeftAnimation;
 	private Animation walkRightAnimation;
 
+	private ShapeRenderer debugRenderer;
 	private SpriteBatch spriteBatch;
 	private SpriteBatch hudSpriteBatch;
 	private boolean debug = false;
@@ -82,6 +83,19 @@ public class WorldRenderer {
 		spriteBatch = new SpriteBatch();
 		hudSpriteBatch = new SpriteBatch();
 		loadTextures();
+		loadFont();
+	}
+
+	private void loadFont() {
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Fipps-Regular.otf"));
+		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+		parameter.size = FONT_SIZE;
+		parameter.kerning = true;
+		parameter.genMipMaps = true;
+		parameter.magFilter = Texture.TextureFilter.Linear;
+		parameter.minFilter = Texture.TextureFilter.Linear;
+		gameFont = generator.generateFont(parameter);
+		generator.dispose();
 	}
 
 	private void loadTextures() {
@@ -137,10 +151,9 @@ public class WorldRenderer {
 		float heartWidth = liveTexture.getRegionWidth() * heartScale;
 		float heartHeight = liveTexture.getRegionHeight() * heartScale;
 		for (int live = 0; live < livesNumber; live++) {
-			System.out.println(height);
 			hudSpriteBatch.draw(liveTexture, live * heartWidth, 480 - heartHeight, heartWidth, heartHeight);
-
 		}
+		gameFont.draw(hudSpriteBatch, String.valueOf(world.getHud().getScore().getScore()), 320, 480);
 		hudSpriteBatch.end();
 	}
 
