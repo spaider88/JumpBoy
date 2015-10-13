@@ -196,7 +196,7 @@ public class WorldRenderer {
 		spriteBatch.begin();
 		Vector2 xBounds = world.getVisibleXBounds();
 		int groundBlockNumber = (int) xBounds.x;
-		for (; groundBlockNumber < xBounds.y; groundBlockNumber++) {
+		for (; groundBlockNumber <= xBounds.y; groundBlockNumber++) {
 			// TODO check level ground type!
 			spriteBatch.draw(fireTexture.get(currentFireTextureNumber), groundBlockNumber, 0, BlockBase.SIZE,
 					BlockBase.SIZE);

@@ -17,6 +17,9 @@ import com.spaidi.jumpboy.utils.levelloader.LevelLoader;
 
 public class World {
 
+	private final static int VISIBILITY_X_LIMIT = 5;
+	private final static int VISIBILITY_Y_LIMIT = 4;
+
 	private JumpBoy jumpBoy;
 	private Level level;
 	private Hud hud;
@@ -77,16 +80,14 @@ public class World {
 	}
 
 	public Vector2 getVisibleXBounds() {
-		// FIXME
-		int x = Math.max(0, (int) jumpBoy.getPosition().x - level.getWidth());
-		int x2 = Math.min(level.getWidth() - 1, (x + 2 * level.getWidth()));
+		int x = Math.max(0, (int) jumpBoy.getPosition().x - VISIBILITY_X_LIMIT);
+		int x2 = Math.min(level.getWidth() - 1, (int) (jumpBoy.getPosition().x + VISIBILITY_X_LIMIT));
 		return new Vector2(x, x2);
 	}
 
 	public Vector2 getVisibleYBounds() {
-		// FIXME
-		int y = Math.max(0, (int) jumpBoy.getPosition().y - level.getHeight());
-		int y2 = Math.min(level.getHeight() - 1, (y + 2 * level.getHeight()));
+		int y = Math.max(0, (int) jumpBoy.getPosition().y - VISIBILITY_Y_LIMIT);
+		int y2 = Math.min(level.getHeight() - 1, (int) (jumpBoy.getPosition().y + VISIBILITY_Y_LIMIT));
 		return new Vector2(y, y2);
 	}
 
