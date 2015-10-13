@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.Array;
 import com.spaidi.jumpboy.World;
 import com.spaidi.jumpboy.actors.blocks.Block;
 import com.spaidi.jumpboy.actors.blocks.BlockBase;
+import com.spaidi.jumpboy.actors.items.Cash;
 import com.spaidi.jumpboy.actors.jumpboy.JumpBoy;
 import com.spaidi.jumpboy.actors.jumpboy.JumpBoy.State;
 import com.spaidi.jumpboy.constants.Messages;
@@ -42,6 +43,7 @@ public class WorldRenderer {
 	private TextureRegion jumpBoyJumpRight;
 	private TextureRegion jumpBoyFallRight;
 	private Array<AtlasRegion> fireTexture;
+	private Array<AtlasRegion> cashTexture;
 	private TextureRegion liveTexture;
 	private BitmapFont gameFont;
 
@@ -53,8 +55,11 @@ public class WorldRenderer {
 	private SpriteBatch hudSpriteBatch;
 	private boolean debug = false;
 
-	private long currentRedraw = 0;
-	private int currentFireTextureNumber = 0;
+	private long currentRedraw = 0;// XXX
+	private int currentFireTextureNumber = 0;// XXX
+	private int currentCashTextureNumber = 0;// XXX
+
+	Cash cash = new Cash(new Vector2(1, 3));// XXX
 
 	@SuppressWarnings("unused")
 	private int width, height;
@@ -106,6 +111,7 @@ public class WorldRenderer {
 		jumpBoyIdleRight.flip(true, false);
 		blockTexture = atlas.findRegion("block");
 		fireTexture = atlas.findRegions("fire");
+		cashTexture = atlas.findRegions("cash");
 		liveTexture = atlas.findRegion("heart");
 		TextureRegion[] walkLeftFrames = new TextureRegion[5];
 		for (int i = 0; i < 5; i++) {
@@ -175,7 +181,14 @@ public class WorldRenderer {
 		for (BlockBase block : world.getDrawableBlocks(world.getLevel().getBlocks())) {
 			spriteBatch.draw(blockTexture, block.getPosition().x, block.getPosition().y, Block.SIZE, Block.SIZE);
 		}
+		spriteBatch.draw(cashTexture.get(currentCashTextureNumber), cash.getPosition().x, cash.getPosition().y, cash.getSize(), cash.getSize());
 		spriteBatch.end();
+		if (currentRedraw % 6 == 0) {
+			currentCashTextureNumber++;
+		}
+		if (currentCashTextureNumber == cashTexture.size - 1) {
+			currentCashTextureNumber = 0;
+		}
 	}
 
 	private void drawGround() {
@@ -188,13 +201,13 @@ public class WorldRenderer {
 			spriteBatch.draw(fireTexture.get(currentFireTextureNumber), groundBlockNumber, 0, BlockBase.SIZE,
 					BlockBase.SIZE);
 		}
+		spriteBatch.end();
 		if (currentRedraw % 6 == 0) {
 			currentFireTextureNumber++;
 		}
 		if (currentFireTextureNumber == fireTexture.size - 1) {
 			currentFireTextureNumber = 0;
 		}
-		spriteBatch.end();
 	}
 
 	private void drawJumpBoy() {
@@ -244,7 +257,6 @@ public class WorldRenderer {
 	}
 
 	private int calculateTextWidth(String text) {
-		System.out.println(gameFont.getSpaceWidth());
 		return (int) (gameFont.getSpaceWidth() * text.length());
 	}
 }

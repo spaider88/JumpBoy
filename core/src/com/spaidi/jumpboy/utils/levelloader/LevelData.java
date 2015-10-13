@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.math.Vector2;
 import com.spaidi.jumpboy.actors.blocks.Block;
-import com.spaidi.jumpboy.actors.levels.GroundTypes;
 import com.spaidi.jumpboy.actors.levels.Level;
+import com.spaidi.jumpboy.constants.GroundTypes;
 
 public class LevelData {
 	private String name;
