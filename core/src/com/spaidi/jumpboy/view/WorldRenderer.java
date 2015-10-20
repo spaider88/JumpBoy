@@ -17,8 +17,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.spaidi.jumpboy.World;
-import com.spaidi.jumpboy.actors.blocks.Block;
-import com.spaidi.jumpboy.actors.blocks.BlockBase;
+import com.spaidi.jumpboy.actors.GameObject;
 import com.spaidi.jumpboy.actors.items.Cash;
 import com.spaidi.jumpboy.actors.jumpboy.JumpBoy;
 import com.spaidi.jumpboy.actors.jumpboy.JumpBoy.State;
@@ -178,10 +177,10 @@ public class WorldRenderer {
 	private void drawBlocks() {
 		spriteBatch.setProjectionMatrix(cam.combined);
 		spriteBatch.begin();
-		for (BlockBase block : world.getDrawableBlocks(world.getLevel().getBlocks())) {
-			spriteBatch.draw(blockTexture, block.getPosition().x, block.getPosition().y, Block.SIZE, Block.SIZE);
+		for (GameObject block : world.getDrawableGameObjects(world.getLevel().getBlocks())) {
+			spriteBatch.draw(blockTexture, block.getPosition().x, block.getPosition().y, block.getWidth(), block.getHeight());
 		}
-		spriteBatch.draw(cashTexture.get(currentCashTextureNumber), cash.getPosition().x, cash.getPosition().y, cash.getSize(), cash.getSize());
+		spriteBatch.draw(cashTexture.get(currentCashTextureNumber), cash.getPosition().x, cash.getPosition().y, cash.getWidth(), cash.getHeight());
 		spriteBatch.end();
 		if (currentRedraw % 6 == 0) {
 			currentCashTextureNumber++;
@@ -198,8 +197,8 @@ public class WorldRenderer {
 		int groundBlockNumber = (int) xBounds.x;
 		for (; groundBlockNumber <= xBounds.y; groundBlockNumber++) {
 			// TODO check level ground type!
-			spriteBatch.draw(fireTexture.get(currentFireTextureNumber), groundBlockNumber, 0, BlockBase.SIZE,
-					BlockBase.SIZE);
+			spriteBatch.draw(fireTexture.get(currentFireTextureNumber), groundBlockNumber, 0, GameObject.DEFAULT_SIZE,
+					GameObject.DEFAULT_SIZE);
 		}
 		spriteBatch.end();
 		if (currentRedraw % 6 == 0) {
@@ -225,14 +224,14 @@ public class WorldRenderer {
 				jumpBoyFrame = jumpBoy.isFacingLeft() ? jumpBoyFallLeft : jumpBoyFallRight;
 			}
 		}
-		spriteBatch.draw(jumpBoyFrame, jumpBoy.getPosition().x, jumpBoy.getPosition().y, JumpBoy.SIZE, JumpBoy.SIZE);
+		spriteBatch.draw(jumpBoyFrame, jumpBoy.getPosition().x, jumpBoy.getPosition().y, jumpBoy.getWidth(), jumpBoy.getHeight());
 		spriteBatch.end();
 	}
 
 	private void drawDebug() {
 		// render blocks
 		debugRenderer.begin(ShapeType.Line);
-		for (BlockBase block : world.getDrawableBlocks(world.getLevel().getBlocks())) {
+		for (GameObject block : world.getDrawableGameObjects(world.getLevel().getBlocks())) {
 			Rectangle rect = block.getBounds();
 			debugRenderer.setColor(new Color(1, 0, 0, 1));
 			debugRenderer.rect(rect.x, rect.y, rect.width, rect.height);

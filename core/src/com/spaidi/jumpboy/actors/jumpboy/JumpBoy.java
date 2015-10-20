@@ -2,8 +2,9 @@ package com.spaidi.jumpboy.actors.jumpboy;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.spaidi.jumpboy.actors.GameObject;
 
-public class JumpBoy {
+public class JumpBoy extends GameObject {
 
 	public enum State {
 		IDLE, WALKING, JUMPING, DYING
@@ -11,7 +12,7 @@ public class JumpBoy {
 
 	public static final float JUMP_VELOCITY = 1f;
 	public static final float SPEED = 4f; // unit per second
-	public static final float SIZE = 0.5f; // half a unit
+	public static final float DEFAULT_SIZE = 0.5f; // unit per second
 
 	private Vector2 position = new Vector2();
 	private Vector2 acceleration = new Vector2();
@@ -22,23 +23,16 @@ public class JumpBoy {
 	private float stateTime = 0;
 
 	public JumpBoy(Vector2 position) {
+		super(position);
+		setSize(DEFAULT_SIZE, DEFAULT_SIZE);
 		setStartPosition(position);
-		this.bounds.height = SIZE;
-		this.bounds.width = SIZE;
 	}
 
 	public void setStartPosition(Vector2 position) {
+		setPosition(position);
 		this.position = position;
 		this.bounds.setX(position.x);
 		this.bounds.setY(position.y);
-	}
-
-	public Vector2 getPosition() {
-		return position;
-	}
-
-	public void setPosition(Vector2 position) {
-		this.position = position;
 	}
 
 	public Vector2 getAcceleration() {
@@ -47,10 +41,6 @@ public class JumpBoy {
 
 	public Vector2 getVelocity() {
 		return velocity;
-	}
-
-	public Rectangle getBounds() {
-		return bounds;
 	}
 
 	public State getState() {

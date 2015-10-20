@@ -7,7 +7,7 @@ import java.util.List;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.spaidi.jumpboy.actors.blocks.BlockBase;
+import com.spaidi.jumpboy.actors.GameObject;
 import com.spaidi.jumpboy.actors.jumpboy.JumpBoy;
 import com.spaidi.jumpboy.actors.levels.Level;
 import com.spaidi.jumpboy.constants.Messages;
@@ -61,22 +61,22 @@ public class World {
 		return messages;
 	}
 
-	private final List<BlockBase> blocks = new ArrayList<BlockBase>(20);
+	private final List<GameObject> gameObjects = new ArrayList<GameObject>(20);
 
-	public List<BlockBase> getDrawableBlocks(BlockBase[][] allBlocks) {
+	public List<GameObject> getDrawableGameObjects(GameObject[][] allGameObjects) {
 		Vector2 xBound = getVisibleXBounds();
 		Vector2 yBound = getVisibleYBounds();
 
-		blocks.clear();
+		gameObjects.clear();
 		for (int col = (int) xBound.x; col <= xBound.y; col++) {
 			for (int row = (int) yBound.x; row <= yBound.y; row++) {
-				BlockBase block = allBlocks[col][row];
-				if (block != null) {
-					blocks.add(block);
+				GameObject gameObject = allGameObjects[col][row];
+				if (gameObject != null) {
+					gameObjects.add(gameObject);
 				}
 			}
 		}
-		return blocks;
+		return gameObjects;
 	}
 
 	public Vector2 getVisibleXBounds() {
