@@ -2,16 +2,16 @@ package com.spaidi.jumpboy.actors.behaviours;
 
 public interface Measurable {
 
-	public void setWidth(float width);
+	void setWidth(float width);
 
-	public float getWidth();
+	float getWidth();
 
-	public void setHeight(float height);
+	void setHeight(float height);
 
-	public float getHeight();
+	float getHeight();
 
-	public void setSize(float width, float height);
+	void setSize(float width, float height);
 
-	public void setSize(float size);
+	void setSize(float size);
 
 }

@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.spaidi.jumpboy.World;
-import com.spaidi.jumpboy.actors.blocks.Block;
+import com.spaidi.jumpboy.actors.GameObject;
 import com.spaidi.jumpboy.actors.jumpboy.JumpBoy;
 import com.spaidi.jumpboy.actors.jumpboy.JumpBoy.State;
 
@@ -47,8 +47,8 @@ public class WorldController {
 		keys.put(Keys.FIRE, false);
 	};
 
-	// Blocks that JumpBoy can collide with any given frame
-	private Array<Block> collidable = new Array<Block>();
+	// GameObjects that JumpBoy can collide with any given frame
+	private Array<GameObject> collidable = new Array<GameObject>();
 
 	public WorldController(World world) {
 		this.world = world;
@@ -109,8 +109,8 @@ public class WorldController {
 		// apply acceleration to change velocity
 		jumpBoy.getVelocity().add(jumpBoy.getAcceleration().x, jumpBoy.getAcceleration().y);
 
-		// checking collisions with the surrounding blocks depending on JumpBoy's velocity
-		checkCollisionWithBlocks(delta);
+		// checking collisions with the surrounding game objects depending on JumpBoy's velocity
+		checkCollisionWithGameObjects(delta);
 		checkIfJumpBoyTouchTheGround();
 
 		// apply damping to halt JumpBoy nicely
@@ -141,7 +141,7 @@ public class WorldController {
 	}
 
 	/** Collision checking **/
-	private void checkCollisionWithBlocks(float delta) {
+	private void checkCollisionWithGameObjects(float delta) {
 		// scale velocity to frame units
 		jumpBoy.getVelocity().scl(delta);
 
@@ -154,9 +154,9 @@ public class WorldController {
 		int startX, endX;
 		int startY = (int) jumpBoy.getBounds().y;
 		int endY = (int) (jumpBoy.getBounds().y + jumpBoy.getBounds().height);
-		// if JumpBoy is heading left then we check if he collides with the block on
+		// if JumpBoy is heading left then we check if he collides with the game object on
 		// his left
-		// we check the block on his right otherwise
+		// we check the game object on his right otherwise
 		if (jumpBoy.getVelocity().x < 0) {
 			startX = endX = (int) Math.floor(jumpBoy.getBounds().x + jumpBoy.getVelocity().x);
 		} else {
@@ -164,8 +164,8 @@ public class WorldController {
 					+ jumpBoy.getVelocity().x);
 		}
 
-		// get the block(s) JumpBoy can collide with
-		populateCollidableBlocks(startX, startY, endX, endY);
+		// get the game object(s) JumpBoy can collide with
+		populateCollidableGameObjects(startX, startY, endX, endY);
 
 		// simulate JumpBoy's movement on the X
 		jumpBoyRect.x += jumpBoy.getVelocity().x;
@@ -174,11 +174,11 @@ public class WorldController {
 		world.getCollisionRects().clear();
 
 		// if JumpBoy collides, make his horizontal velocity 0
-		for (Block block : collidable) {
-			if (block == null) continue;
-			if (jumpBoyRect.overlaps(block.getBounds())) {
+		for (GameObject gameObject : collidable) {
+			if (gameObject == null) continue;
+			if (jumpBoyRect.overlaps(gameObject.getBounds())) {
 				jumpBoy.getVelocity().x = 0;
-				world.getCollisionRects().add(block.getBounds());
+				world.getCollisionRects().add(gameObject.getBounds());
 				break;
 			}
 		}
@@ -196,18 +196,18 @@ public class WorldController {
 					+ jumpBoy.getVelocity().y);
 		}
 
-		populateCollidableBlocks(startX, startY, endX, endY);
+		populateCollidableGameObjects(startX, startY, endX, endY);
 
 		jumpBoyRect.y += jumpBoy.getVelocity().y;
 
-		for (Block block : collidable) {
-			if (block == null) continue;
-			if (jumpBoyRect.overlaps(block.getBounds())) {
+		for (GameObject gameObject : collidable) {
+			if (gameObject == null) continue;
+			if (jumpBoyRect.overlaps(gameObject.getBounds())) {
 				if (jumpBoy.getVelocity().y < 0) {
 					grounded = true;
 				}
 				jumpBoy.getVelocity().y = 0;
-				world.getCollisionRects().add(block.getBounds());
+				world.getCollisionRects().add(gameObject.getBounds());
 				break;
 			}
 		}
@@ -227,9 +227,9 @@ public class WorldController {
 	}
 
 	/**
-	 * populate the collidable array with the blocks found in the enclosing coordinates
+	 * populate the collidable array with the game objects found in the enclosing coordinates
 	 **/
-	private void populateCollidableBlocks(int startX, int startY, int endX, int endY) {
+	private void populateCollidableGameObjects(int startX, int startY, int endX, int endY) {
 		collidable.clear();
 		for (int x = startX; x <= endX; x++) {
 			for (int y = startY; y <= endY; y++) {

@@ -2,11 +2,9 @@ package com.spaidi.jumpboy.actors;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.spaidi.jumpboy.actors.behaviours.Bounds;
-import com.spaidi.jumpboy.actors.behaviours.Measurable;
-import com.spaidi.jumpboy.actors.behaviours.Position;
+import com.spaidi.jumpboy.actors.behaviours.Collisionable;
 
-public abstract class GameObject implements Measurable, Position, Bounds<Rectangle> {
+public abstract class GameObject implements Collisionable {
 	public static final float DEFAULT_SIZE = 1f;
 
 	private Vector2 position = new Vector2();

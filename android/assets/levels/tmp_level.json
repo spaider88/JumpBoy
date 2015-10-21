@@ -3,7 +3,8 @@
 	"width": 100,
 	"height": 10,
 	"startPosition": {"x":0,"y":4},
-	"blocks":[
+	"gameObjects":[
+		{"x":1,"y":3,"type":"cash"},
 		{"x":0,"y":9},
 		{"x":1,"y":9},
 		{"x":2,"y":9},

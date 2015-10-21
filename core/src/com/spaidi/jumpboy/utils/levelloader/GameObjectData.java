@@ -1,10 +1,11 @@
 package com.spaidi.jumpboy.utils.levelloader;
 
-public class BlockData {
+public class GameObjectData {
 	private int x = 0;
 	private int y = 0;
 	private float width = 1.0f;
 	private float height = 1.0f;
+	private String type = "block";
 
 	public int getX() {
 		return x;
@@ -36,5 +37,13 @@ public class BlockData {
 
 	public void setHeight(float height) {
 		this.height = height;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 }

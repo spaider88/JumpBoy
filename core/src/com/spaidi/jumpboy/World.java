@@ -92,7 +92,7 @@ public class World {
 	}
 
 	public void respawnJumpBoy() {
-		jumpBoy.setStartPosition(level.getStartPosition());
+		jumpBoy.setPosition(level.getStartPosition());
 	}
 
 	public void killJumpBoy() {
