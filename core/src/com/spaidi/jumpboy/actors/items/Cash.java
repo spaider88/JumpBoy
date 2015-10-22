@@ -2,23 +2,47 @@ package com.spaidi.jumpboy.actors.items;
 
 import java.util.Random;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.spaidi.jumpboy.actors.GameObject;
+import com.badlogic.gdx.utils.Array;
+import com.spaidi.jumpboy.actors.DrawableGameObject;
 import com.spaidi.jumpboy.actors.behaviours.Destroyable;
 import com.spaidi.jumpboy.actors.behaviours.Scoreable;
 import com.spaidi.jumpboy.constants.Scores;
 
-public class Cash extends GameObject implements Scoreable, Destroyable {
+public class Cash extends DrawableGameObject implements Scoreable, Destroyable {
+
+	private static final float CASH_FRAME_DURATION = 0.08f;
 
 	private float size;
+	private float liveTime;
+
+	private Animation cashAnimation;
 
 	public Cash(Vector2 position) {
 		super(position);
 		generateCashSize();
+		generateStartLiveTime();
+	}
+
+	@Override
+	public void setTextures(Array<TextureRegion> textures) {
+		cashAnimation = new Animation(CASH_FRAME_DURATION, textures);
+		super.setTextures(textures);
 	}
 
 	private void generateCashSize() {
-		setSize((1.0f + new Random().nextFloat()) / 2.0f);
+		size = randomFloat();
+		setSize(size);
+	}
+
+	private void generateStartLiveTime() {
+		liveTime = randomFloat();
+	}
+
+	private float randomFloat() {
+		return (1.0f + new Random().nextFloat()) / 2.0f;
 	}
 
 	@Override
@@ -28,5 +52,17 @@ public class Cash extends GameObject implements Scoreable, Destroyable {
 
 	@Override
 	public void destroy() {
+
+	}
+
+	@Override
+	public void update(float deltaTime) {
+		liveTime += deltaTime;
+		super.update(deltaTime);
+	}
+
+	@Override
+	public TextureRegion getCurrentTexture() {
+		return cashAnimation.getKeyFrame(liveTime, true);
 	}
 }

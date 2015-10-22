@@ -1,14 +1,14 @@
 package com.spaidi.jumpboy.actors.levels;
 
 import com.badlogic.gdx.math.Vector2;
-import com.spaidi.jumpboy.actors.GameObject;
+import com.spaidi.jumpboy.actors.DrawableGameObject;
 import com.spaidi.jumpboy.constants.GroundTypes;
 
 public class Level {
 	private int width;
 	private int height;
 	private Vector2 startPosition;
-	private GameObject[][] gameObjects;
+	private DrawableGameObject[][] drawableGameObjects;
 	private GroundTypes groundType;
 
 	public int getWidth() {
@@ -23,8 +23,8 @@ public class Level {
 		return startPosition.cpy();
 	}
 
-	public GameObject[][] getGameObjects() {
-		return gameObjects;
+	public DrawableGameObject[][] getDrawableGameObjects() {
+		return drawableGameObjects;
 	}
 
 	public void setWidth(int width) {
@@ -39,12 +39,12 @@ public class Level {
 		this.startPosition = startPosition;
 	}
 
-	public void setGameObjects(GameObject[][] gameObjects) {
-		this.gameObjects = gameObjects;
+	public void setDrawableGameObjects(DrawableGameObject[][] drawableGameObjects) {
+		this.drawableGameObjects = drawableGameObjects;
 	}
 
-	public GameObject get(int x, int y) {
-		return gameObjects[x][y];
+	public DrawableGameObject get(int x, int y) {
+		return drawableGameObjects[x][y];
 	}
 
 	public GroundTypes getGroundType() {

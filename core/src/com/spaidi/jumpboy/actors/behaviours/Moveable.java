@@ -2,7 +2,7 @@ package com.spaidi.jumpboy.actors.behaviours;
 
 import com.badlogic.gdx.math.Vector2;
 
-public interface Moveable extends Position {
+public interface Moveable extends Position, Changable {
 
 	void setAcceleration(Vector2 acceleration);
 
@@ -11,6 +11,4 @@ public interface Moveable extends Position {
 	void setVelocity(Vector2 velocity);
 
 	Vector2 getVelocity();
-
-	void update(float delta);
 }

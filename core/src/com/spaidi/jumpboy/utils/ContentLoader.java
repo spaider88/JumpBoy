@@ -25,8 +25,8 @@ public class ContentLoader {
 	public TextureRegion jumpBoyFallRight;
 	public TextureRegion liveTexture;
 
-	public Array<AtlasRegion> fireTexture;
-	public Array<AtlasRegion> cashTexture;
+	public Array<TextureRegion> fireTexture;
+	public Array<TextureRegion> cashTexture;
 
 	public BitmapFont gameFont;
 
@@ -44,19 +44,19 @@ public class ContentLoader {
 		jumpBoyIdleRight = new TextureRegion(jumpBoyIdleLeft);
 		jumpBoyIdleRight.flip(true, false);
 		blockTexture = atlas.findRegion("block");
-		fireTexture = atlas.findRegions("fire");
-		cashTexture = atlas.findRegions("cash");
+		fireTexture = convertToArrayOfTextureRegion(atlas.findRegions("fire"));
+		cashTexture = convertToArrayOfTextureRegion(atlas.findRegions("cash"));
 		liveTexture = atlas.findRegion("heart");
-		TextureRegion[] walkLeftFrames = new TextureRegion[5];
+		AtlasRegion[] walkLeftFrames = new AtlasRegion[5];
 		for (int i = 0; i < 5; i++) {
 			walkLeftFrames[i] = atlas.findRegion("jump-boy-0" + (i + 2));
 		}
 		walkLeftAnimation = new Animation(RUNNING_FRAME_DURATION, walkLeftFrames);
 
-		TextureRegion[] walkRightFrames = new TextureRegion[5];
+		AtlasRegion[] walkRightFrames = new AtlasRegion[5];
 
 		for (int i = 0; i < 5; i++) {
-			walkRightFrames[i] = new TextureRegion(walkLeftFrames[i]);
+			walkRightFrames[i] = new AtlasRegion(walkLeftFrames[i]);
 			walkRightFrames[i].flip(true, false);
 		}
 		walkRightAnimation = new Animation(RUNNING_FRAME_DURATION, walkRightFrames);
@@ -67,6 +67,14 @@ public class ContentLoader {
 		jumpBoyFallLeft = atlas.findRegion("jump-boy-down");
 		jumpBoyFallRight = new TextureRegion(jumpBoyFallLeft);
 		jumpBoyFallRight.flip(true, false);
+	}
+
+	private Array<TextureRegion> convertToArrayOfTextureRegion(Array<AtlasRegion> array) {
+		Array<TextureRegion> res = new Array<TextureRegion>();
+		for (AtlasRegion ar : array) {
+			res.add(ar);
+		}
+		return res;
 	}
 
 	private void loadFont() {

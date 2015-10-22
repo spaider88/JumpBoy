@@ -30,6 +30,7 @@ public class GameScreen implements Screen, InputProcessor {
 		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		controller.update(delta);
+		world.update(delta);
 		renderer.render();
 	}
 

@@ -7,12 +7,13 @@ import java.util.List;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.spaidi.jumpboy.actors.GameObject;
+import com.spaidi.jumpboy.actors.DrawableGameObject;
 import com.spaidi.jumpboy.actors.jumpboy.JumpBoy;
 import com.spaidi.jumpboy.actors.levels.Level;
 import com.spaidi.jumpboy.constants.Messages;
 import com.spaidi.jumpboy.constants.Scores;
 import com.spaidi.jumpboy.hud.Hud;
+import com.spaidi.jumpboy.utils.ContentLoader;
 import com.spaidi.jumpboy.utils.levelloader.LevelLoader;
 
 public class World {
@@ -24,6 +25,8 @@ public class World {
 	private Level level;
 	private Hud hud;
 
+	private ContentLoader contentLoader;
+
 	private Array<Rectangle> collisionRects = new Array<Rectangle>();
 	private Array<Messages> messages = new Array<Messages>();
 
@@ -33,7 +36,9 @@ public class World {
 
 	private void createDemoWorld() {
 		try {
-			level = LevelLoader.loadLevel("tmp_level");
+			contentLoader = new ContentLoader();
+			contentLoader.loadContent();
+			level = LevelLoader.loadLevel("tmp_level", contentLoader);
 			jumpBoy = new JumpBoy(level.getStartPosition());
 			hud = new Hud();
 		} catch (IOException e) {
@@ -57,26 +62,30 @@ public class World {
 		return hud;
 	}
 
+	public ContentLoader getContentLoader() {
+		return contentLoader;
+	}
+
 	public Array<Messages> getMessages() {
 		return messages;
 	}
 
-	private final List<GameObject> gameObjects = new ArrayList<GameObject>(20);
+	private final List<DrawableGameObject> drawableGameObjects = new ArrayList<DrawableGameObject>(20);
 
-	public List<GameObject> getDrawableGameObjects(GameObject[][] allGameObjects) {
+	public List<DrawableGameObject> getDrawableGameObjects(DrawableGameObject[][] allGameObjects) {
 		Vector2 xBound = getVisibleXBounds();
 		Vector2 yBound = getVisibleYBounds();
 
-		gameObjects.clear();
+		drawableGameObjects.clear();
 		for (int col = (int) xBound.x; col <= xBound.y; col++) {
 			for (int row = (int) yBound.x; row <= yBound.y; row++) {
-				GameObject gameObject = allGameObjects[col][row];
+				DrawableGameObject gameObject = allGameObjects[col][row];
 				if (gameObject != null) {
-					gameObjects.add(gameObject);
+					drawableGameObjects.add(gameObject);
 				}
 			}
 		}
-		return gameObjects;
+		return drawableGameObjects;
 	}
 
 	public Vector2 getVisibleXBounds() {
@@ -107,5 +116,16 @@ public class World {
 
 	private void addGameMessage(Messages msg) {
 		messages.add(msg);
+	}
+
+	public void update(float delta) {
+		for (int currentX = 0; currentX < level.getWidth(); currentX++) {
+			for (int currentY = 0; currentY < level.getHeight(); currentY++) {
+				DrawableGameObject dgo = level.get(currentX, currentY);
+				if (dgo != null) {
+					dgo.update(delta);
+				}
+			}
+		}
 	}
 }

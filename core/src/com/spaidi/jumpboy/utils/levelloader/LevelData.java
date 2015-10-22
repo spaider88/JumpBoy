@@ -3,13 +3,13 @@ package com.spaidi.jumpboy.utils.levelloader;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.math.Vector2;
-import com.spaidi.jumpboy.actors.GameObject;
+import com.spaidi.jumpboy.actors.DrawableGameObject;
 import com.spaidi.jumpboy.actors.blocks.Block;
 import com.spaidi.jumpboy.actors.items.Cash;
-import com.spaidi.jumpboy.actors.jumpboy.JumpBoy;
 import com.spaidi.jumpboy.actors.levels.Level;
 import com.spaidi.jumpboy.constants.GameObjectTypes;
 import com.spaidi.jumpboy.constants.GroundTypes;
+import com.spaidi.jumpboy.utils.ContentLoader;
 
 public class LevelData {
 	private String name;
@@ -67,34 +67,31 @@ public class LevelData {
 		this.startPosition = startPosition;
 	}
 
-	public Level createLevel() {
+	public Level createLevel(ContentLoader contentLoader) {
 		Level level = new Level();
 		level.setWidth(width);
 		level.setHeight(height);
 		level.setStartPosition(startPosition);
-		level.setGameObjects(createGameObjects());
+		level.setDrawableGameObjects(createDrawableGameObjects(contentLoader));
 		level.setGroundType(GroundTypes.valueOf(groundType.toUpperCase()));
 		return level;
 	}
 
-	private GameObject[][] createGameObjects() {
-		GameObject[][] createdGameObjects = new GameObject[width][height];
-		populateGameObjects(createdGameObjects);
+	private DrawableGameObject[][] createDrawableGameObjects(ContentLoader contentLoader) {
+		DrawableGameObject[][] createdGameObjects = new DrawableGameObject[width][height];
+		populateGameObjects(createdGameObjects, contentLoader);
 		return createdGameObjects;
 	}
 
-	private <T> void populateGameObjects(GameObject[][] createdGameObjects) {
+	private <T> void populateGameObjects(DrawableGameObject[][] drawableGameObjects, ContentLoader contentLoader) {
 		for (GameObjectData gameObject : gameObjects) {
 			GameObjectTypes gameObjectType = GameObjectTypes.fromString(gameObject.getType());
 			switch (gameObjectType) {
 				case BLOCK:
-					addBlock(gameObject, createdGameObjects);
+					addBlock(gameObject, drawableGameObjects, contentLoader);
 					break;
 				case CASH:
-					addCash(gameObject, createdGameObjects);
-					break;
-				case PLAYER:
-					addPlayer(gameObject, createdGameObjects);
+					addCash(gameObject, drawableGameObjects, contentLoader);
 					break;
 				default:
 					break;
@@ -103,24 +100,17 @@ public class LevelData {
 		}
 	}
 
-	private void addBlock(GameObjectData gameObject, GameObject[][] createdGameObjects) {
+	private void addBlock(GameObjectData gameObject, DrawableGameObject[][] drawableGameObjects, ContentLoader contentLoader) {
 		Block block = new Block(new Vector2(gameObject.getX(), gameObject.getY()));
 		block.setWidth(gameObject.getWidth());
 		block.setHeight(gameObject.getHeight());
-		createdGameObjects[gameObject.getX()][gameObject.getY()] = block;
+		block.addTexture(contentLoader.blockTexture);
+		drawableGameObjects[gameObject.getX()][gameObject.getY()] = block;
 	}
 
-	private void addCash(GameObjectData gameObject, GameObject[][] createdGameObjects) {
+	private void addCash(GameObjectData gameObject, DrawableGameObject[][] createdGameObjects, ContentLoader contentLoader) {
 		Cash cash = new Cash(new Vector2(gameObject.getX(), gameObject.getY()));
-		cash.setWidth(gameObject.getWidth());
-		cash.setHeight(gameObject.getHeight());
+		cash.setTextures(contentLoader.cashTexture);
 		createdGameObjects[gameObject.getX()][gameObject.getY()] = cash;
-	}
-
-	private void addPlayer(GameObjectData gameObject, GameObject[][] createdGameObjects) {
-		JumpBoy player = new JumpBoy(new Vector2(gameObject.getX(), gameObject.getY()));
-		player.setWidth(gameObject.getWidth());
-		player.setHeight(gameObject.getHeight());
-		createdGameObjects[gameObject.getX()][gameObject.getY()] = player;
 	}
 }

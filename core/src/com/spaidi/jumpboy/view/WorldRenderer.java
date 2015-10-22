@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.spaidi.jumpboy.World;
+import com.spaidi.jumpboy.actors.DrawableGameObject;
 import com.spaidi.jumpboy.actors.GameObject;
 import com.spaidi.jumpboy.actors.jumpboy.JumpBoy;
 import com.spaidi.jumpboy.actors.jumpboy.JumpBoy.State;
@@ -20,7 +21,6 @@ public class WorldRenderer {
 	private static final float CAMERA_HEIGHT = 7f;
 
 	private World world;
-	private ContentLoader contentLoader;
 	private OrthographicCamera cam;
 
 	private ShapeRenderer debugRenderer;
@@ -58,9 +58,6 @@ public class WorldRenderer {
 		}
 		spriteBatch = new SpriteBatch();
 		hudSpriteBatch = new SpriteBatch();
-
-		contentLoader = new ContentLoader();
-		contentLoader.loadContent();
 	}
 
 	public void render() {
@@ -71,7 +68,7 @@ public class WorldRenderer {
 		cam.position.set(world.getJumpBoy().getPosition().x, world.getJumpBoy().getPosition().y, 0);
 		cam.update();
 		drawHud();
-		drawBlocks();
+		drawDrawableGameObjects();
 		drawGround();
 		drawJumpBoy();
 		drawMessages();
@@ -84,31 +81,35 @@ public class WorldRenderer {
 	private void drawMessages() {
 		hudSpriteBatch.begin();
 		for (Messages message : world.getMessages()) {
-			contentLoader.gameFont.draw(hudSpriteBatch, message.getMessage(),
+			getCL().gameFont.draw(hudSpriteBatch, message.getMessage(),
 					320 - (calculateTextWidth(message.getMessage()) / 2), 240);
 		}
 		world.getMessages().clear();
 		hudSpriteBatch.end();
 	}
 
+	private ContentLoader getCL() {
+		return world.getContentLoader();
+	}
+
 	private void drawHud() {
 		hudSpriteBatch.begin();
 		int livesNumber = world.getHud().getLives().getLivesNumber();
 		float heartScale = 0.5f;
-		float heartWidth = contentLoader.liveTexture.getRegionWidth() * heartScale;
-		float heartHeight = contentLoader.liveTexture.getRegionHeight() * heartScale;
+		float heartWidth = getCL().liveTexture.getRegionWidth() * heartScale;
+		float heartHeight = getCL().liveTexture.getRegionHeight() * heartScale;
 		for (int live = 0; live < livesNumber; live++) {
-			hudSpriteBatch.draw(contentLoader.liveTexture, live * heartWidth, 480 - heartHeight, heartWidth, heartHeight);
+			hudSpriteBatch.draw(getCL().liveTexture, live * heartWidth, 480 - heartHeight, heartWidth, heartHeight);
 		}
-		contentLoader.gameFont.draw(hudSpriteBatch, String.valueOf(world.getHud().getScore().getScore()), 320, 480);
+		getCL().gameFont.draw(hudSpriteBatch, String.valueOf(world.getHud().getScore().getScore()), 320, 480);
 		hudSpriteBatch.end();
 	}
 
-	private void drawBlocks() {
+	private void drawDrawableGameObjects() {
 		spriteBatch.setProjectionMatrix(cam.combined);
 		spriteBatch.begin();
-		for (GameObject block : world.getDrawableGameObjects(world.getLevel().getGameObjects())) {
-			spriteBatch.draw(contentLoader.blockTexture, block.getPosition().x, block.getPosition().y, block.getWidth(), block.getHeight());
+		for (DrawableGameObject dgo : world.getDrawableGameObjects(world.getLevel().getDrawableGameObjects())) {
+			spriteBatch.draw(dgo.getCurrentTexture(), dgo.getPosition().x, dgo.getPosition().y, dgo.getWidth(), dgo.getHeight());
 		}
 		spriteBatch.end();
 	}
@@ -120,14 +121,14 @@ public class WorldRenderer {
 		int groundBlockNumber = (int) xBounds.x;
 		for (; groundBlockNumber <= xBounds.y; groundBlockNumber++) {
 			// TODO check level ground type!
-			spriteBatch.draw(contentLoader.fireTexture.get(currentFireTextureNumber), groundBlockNumber, 0, GameObject.DEFAULT_SIZE,
+			spriteBatch.draw(getCL().fireTexture.get(currentFireTextureNumber), groundBlockNumber, 0, GameObject.DEFAULT_SIZE,
 					GameObject.DEFAULT_SIZE);
 		}
 		spriteBatch.end();
 		if (currentRedraw % 6 == 0) {
 			currentFireTextureNumber++;
 		}
-		if (currentFireTextureNumber == contentLoader.fireTexture.size - 1) {
+		if (currentFireTextureNumber == getCL().fireTexture.size - 1) {
 			currentFireTextureNumber = 0;
 		}
 	}
@@ -136,26 +137,26 @@ public class WorldRenderer {
 		// spriteBatch.setProjectionMatrix(cam.combined);
 		spriteBatch.begin();
 		JumpBoy jumpBoy = world.getJumpBoy();
-		contentLoader.jumpBoyFrame = jumpBoy.isFacingLeft() ? contentLoader.jumpBoyIdleLeft : contentLoader.jumpBoyIdleRight;
+		getCL().jumpBoyFrame = jumpBoy.isFacingLeft() ? getCL().jumpBoyIdleLeft : getCL().jumpBoyIdleRight;
 		if (jumpBoy.getState().equals(State.WALKING)) {
-			contentLoader.jumpBoyFrame = jumpBoy.isFacingLeft() ? contentLoader.walkLeftAnimation.getKeyFrame(jumpBoy.getStateTime(), true) :
-					contentLoader.walkRightAnimation.getKeyFrame(jumpBoy.getStateTime(), true);
+			getCL().jumpBoyFrame = jumpBoy.isFacingLeft() ? getCL().walkLeftAnimation.getKeyFrame(jumpBoy.getStateTime(), true) :
+					getCL().walkRightAnimation.getKeyFrame(jumpBoy.getStateTime(), true);
 		} else if (jumpBoy.getState().equals(State.JUMPING)) {
 			if (jumpBoy.getVelocity().y > 0) {
-				contentLoader.jumpBoyFrame = jumpBoy.isFacingLeft() ? contentLoader.jumpBoyJumpLeft : contentLoader.jumpBoyJumpRight;
+				getCL().jumpBoyFrame = jumpBoy.isFacingLeft() ? getCL().jumpBoyJumpLeft : getCL().jumpBoyJumpRight;
 			} else {
-				contentLoader.jumpBoyFrame = jumpBoy.isFacingLeft() ? contentLoader.jumpBoyFallLeft : contentLoader.jumpBoyFallRight;
+				getCL().jumpBoyFrame = jumpBoy.isFacingLeft() ? getCL().jumpBoyFallLeft : getCL().jumpBoyFallRight;
 			}
 		}
-		spriteBatch.draw(contentLoader.jumpBoyFrame, jumpBoy.getPosition().x, jumpBoy.getPosition().y, jumpBoy.getWidth(), jumpBoy.getHeight());
+		spriteBatch.draw(getCL().jumpBoyFrame, jumpBoy.getPosition().x, jumpBoy.getPosition().y, jumpBoy.getWidth(), jumpBoy.getHeight());
 		spriteBatch.end();
 	}
 
 	private void drawDebug() {
 		// render blocks
 		debugRenderer.begin(ShapeType.Line);
-		for (GameObject block : world.getDrawableGameObjects(world.getLevel().getGameObjects())) {
-			Rectangle rect = block.getBounds();
+		for (DrawableGameObject dgo : world.getDrawableGameObjects(world.getLevel().getDrawableGameObjects())) {
+			Rectangle rect = dgo.getBounds();
 			debugRenderer.setColor(new Color(1, 0, 0, 1));
 			debugRenderer.rect(rect.x, rect.y, rect.width, rect.height);
 		}
@@ -179,6 +180,6 @@ public class WorldRenderer {
 	}
 
 	private int calculateTextWidth(String text) {
-		return (int) (contentLoader.gameFont.getSpaceWidth() * text.length());
+		return (int) (getCL().gameFont.getSpaceWidth() * text.length());
 	}
 }
