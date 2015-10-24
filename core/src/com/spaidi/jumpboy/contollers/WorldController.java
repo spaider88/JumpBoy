@@ -8,6 +8,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.spaidi.jumpboy.World;
 import com.spaidi.jumpboy.actors.GameObject;
+import com.spaidi.jumpboy.actors.behaviours.Destroyable;
+import com.spaidi.jumpboy.actors.behaviours.Scoreable;
 import com.spaidi.jumpboy.actors.jumpboy.JumpBoy;
 import com.spaidi.jumpboy.actors.jumpboy.JumpBoy.State;
 
@@ -177,9 +179,10 @@ public class WorldController {
 		for (GameObject gameObject : collidable) {
 			if (gameObject == null) continue;
 			if (jumpBoyRect.overlaps(gameObject.getBounds())) {
-				jumpBoy.getVelocity().x = 0;
-				world.getCollisionRects().add(gameObject.getBounds());
-				break;
+				if (handleCollision(gameObject)) {
+					jumpBoy.getVelocity().x = 0;
+					break;
+				}
 			}
 		}
 
@@ -203,27 +206,37 @@ public class WorldController {
 		for (GameObject gameObject : collidable) {
 			if (gameObject == null) continue;
 			if (jumpBoyRect.overlaps(gameObject.getBounds())) {
-				if (jumpBoy.getVelocity().y < 0) {
-					grounded = true;
+				if (handleCollision(gameObject)) {
+					if (jumpBoy.getVelocity().y < 0) {
+						grounded = true;
+					}
+					jumpBoy.getVelocity().y = 0;
+					break;
 				}
-				jumpBoy.getVelocity().y = 0;
-				world.getCollisionRects().add(gameObject.getBounds());
-				break;
 			}
 		}
 		// reset the collision box's position on Y
 		jumpBoyRect.y = jumpBoy.getPosition().y;
-
-		// update JumpBoy's position
-		// jumpBoy.getPosition().add(jumpBoy.getVelocity());
-		// jumpBoy.getBounds().x = jumpBoy.getPosition().x;
-		// jumpBoy.getBounds().y = jumpBoy.getPosition().y;
 
 		// un-scale velocity (not in frame time)
 		jumpBoy.getVelocity().scl(1 / delta);
 
 		// release rectangle back to pool
 		rectPool.free(jumpBoyRect);
+	}
+
+	private boolean handleCollision(GameObject gameObject) {
+		boolean blockPlayer = true;
+		world.getCollisionRects().add(gameObject.getBounds());
+		if (gameObject instanceof Scoreable) {
+			world.getHud().getScore().addPoints(((Scoreable) gameObject).score());
+		}
+		if (gameObject instanceof Destroyable) {
+			((Destroyable) gameObject).destroy();
+			world.getLevel().destroyGameObject(gameObject);
+			blockPlayer = false;
+		}
+		return blockPlayer;
 	}
 
 	/**

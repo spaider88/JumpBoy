@@ -2,6 +2,7 @@ package com.spaidi.jumpboy.actors.levels;
 
 import com.badlogic.gdx.math.Vector2;
 import com.spaidi.jumpboy.actors.DrawableGameObject;
+import com.spaidi.jumpboy.actors.GameObject;
 import com.spaidi.jumpboy.constants.GroundTypes;
 
 public class Level {
@@ -45,6 +46,10 @@ public class Level {
 
 	public DrawableGameObject get(int x, int y) {
 		return drawableGameObjects[x][y];
+	}
+
+	public void destroyGameObject(GameObject gameObject) {
+		drawableGameObjects[(int) gameObject.getPosition().x][(int) gameObject.getPosition().y] = null;
 	}
 
 	public GroundTypes getGroundType() {

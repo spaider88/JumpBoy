@@ -52,7 +52,7 @@ public class Cash extends DrawableGameObject implements Scoreable, Destroyable {
 
 	@Override
 	public void destroy() {
-
+		// TODO on destroy... some animation?
 	}
 
 	@Override
