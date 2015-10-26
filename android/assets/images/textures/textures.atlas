@@ -13,105 +13,98 @@ block
   index: -1
 cash
   rotate: false
-  xy: 725, 71
+  xy: 541, 71
   size: 50, 46
   orig: 50, 46
   offset: 0, 0
-  index: -1
+  index: 0
 cash
   rotate: false
   xy: 52, 4
   size: 50, 46
   orig: 50, 46
   offset: 0, 0
-  index: -1
+  index: 1
 cash
   rotate: false
-  xy: 777, 71
+  xy: 593, 71
   size: 50, 46
   orig: 50, 46
   offset: 0, 0
-  index: -1
+  index: 2
 cash
   rotate: false
   xy: 104, 4
   size: 50, 46
   orig: 50, 46
   offset: 0, 0
-  index: -1
+  index: 3
 cash
   rotate: false
-  xy: 829, 71
+  xy: 645, 71
   size: 50, 46
   orig: 50, 46
   offset: 0, 0
-  index: -1
+  index: 4
 cash
   rotate: false
   xy: 156, 4
   size: 50, 46
   orig: 50, 46
   offset: 0, 0
-  index: -1
+  index: 5
 cash
   rotate: false
-  xy: 881, 71
+  xy: 697, 71
   size: 50, 46
   orig: 50, 46
   offset: 0, 0
-  index: -1
+  index: 6
 cash
   rotate: false
   xy: 208, 4
   size: 50, 46
   orig: 50, 46
   offset: 0, 0
-  index: -1
+  index: 7
 fire
   rotate: false
   xy: 2, 52
   size: 115, 65
   orig: 115, 65
   offset: 0, 0
-  index: -1
+  index: 0
 fire
   rotate: false
   xy: 119, 52
   size: 115, 65
   orig: 115, 65
   offset: 0, 0
-  index: -1
+  index: 1
 fire
   rotate: false
   xy: 236, 52
   size: 115, 65
   orig: 115, 65
   offset: 0, 0
-  index: -1
+  index: 2
 fire
   rotate: false
   xy: 353, 52
   size: 115, 65
   orig: 115, 65
   offset: 0, 0
-  index: -1
-fire
-  rotate: false
-  xy: 470, 52
-  size: 115, 65
-  orig: 115, 65
-  offset: 0, 0
-  index: -1
+  index: 3
 heart
   rotate: false
-  xy: 587, 52
+  xy: 470, 52
   size: 69, 65
   orig: 69, 65
   offset: 0, 0
   index: -1
 jump-boy-01
   rotate: false
-  xy: 933, 89
+  xy: 749, 89
   size: 24, 28
   orig: 24, 28
   offset: 0, 0
@@ -125,21 +118,21 @@ jump-boy-02
   index: -1
 jump-boy-03
   rotate: false
-  xy: 338, 24
+  xy: 827, 91
   size: 24, 26
   orig: 24, 26
   offset: 0, 0
   index: -1
 jump-boy-04
   rotate: false
-  xy: 364, 24
+  xy: 338, 24
   size: 24, 26
   orig: 24, 26
   offset: 0, 0
   index: -1
 jump-boy-05
   rotate: false
-  xy: 959, 89
+  xy: 775, 89
   size: 24, 28
   orig: 24, 28
   offset: 0, 0
@@ -153,7 +146,7 @@ jump-boy-06
   index: -1
 jump-boy-down
   rotate: false
-  xy: 985, 89
+  xy: 801, 89
   size: 24, 28
   orig: 24, 28
   offset: 0, 0
@@ -163,12 +156,5 @@ jump-boy-up
   xy: 312, 22
   size: 24, 28
   orig: 24, 28
-  offset: 0, 0
-  index: -1
-magma
-  rotate: false
-  xy: 658, 52
-  size: 65, 65
-  orig: 65, 65
   offset: 0, 0
   index: -1

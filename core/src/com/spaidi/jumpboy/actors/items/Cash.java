@@ -58,7 +58,6 @@ public class Cash extends DrawableGameObject implements Scoreable, Destroyable {
 	@Override
 	public void update(float deltaTime) {
 		liveTime += deltaTime;
-		super.update(deltaTime);
 	}
 
 	@Override

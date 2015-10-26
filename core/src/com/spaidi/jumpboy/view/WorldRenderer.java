@@ -27,9 +27,7 @@ public class WorldRenderer {
 	private SpriteBatch spriteBatch;
 	private SpriteBatch hudSpriteBatch;
 	private boolean debug = false;
-
-	private long currentRedraw = 0;// XXX
-	private int currentFireTextureNumber = 0;// XXX
+	private float renderingTime = 0f;
 
 	@SuppressWarnings("unused")
 	private int width, height;
@@ -60,11 +58,8 @@ public class WorldRenderer {
 		hudSpriteBatch = new SpriteBatch();
 	}
 
-	public void render() {
-		++currentRedraw;
-		if (currentRedraw > 100) {
-			currentRedraw = 0;
-		}
+	public void render(float delta) {
+		renderingTime += delta;
 		cam.position.set(world.getJumpBoy().getPosition().x, world.getJumpBoy().getPosition().y, 0);
 		cam.update();
 		drawHud();
@@ -121,16 +116,10 @@ public class WorldRenderer {
 		int groundBlockNumber = (int) xBounds.x;
 		for (; groundBlockNumber <= xBounds.y; groundBlockNumber++) {
 			// TODO check level ground type!
-			spriteBatch.draw(getCL().fireTexture.get(currentFireTextureNumber), groundBlockNumber, 0, GameObject.DEFAULT_SIZE,
-					GameObject.DEFAULT_SIZE);
+			spriteBatch.draw(getCL().fireAnimation.getKeyFrame(renderingTime, true), groundBlockNumber, 0,
+					GameObject.DEFAULT_SIZE, GameObject.DEFAULT_SIZE);
 		}
 		spriteBatch.end();
-		if (currentRedraw % 6 == 0) {
-			currentFireTextureNumber++;
-		}
-		if (currentFireTextureNumber == getCL().fireTexture.size - 1) {
-			currentFireTextureNumber = 0;
-		}
 	}
 
 	private void drawJumpBoy() {

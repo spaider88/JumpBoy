@@ -1,11 +1,15 @@
 package com.spaidi.jumpboy.utils;
 
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
+import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 
 public class TextureSetup {
 
 	public static void main(String[] args) {
-		TexturePacker.process("E:\\Programowanie\\Projekty\\Java\\JumpBoy\\android\\assets\\images\\",
-				"E:\\Programowanie\\Projekty\\Java\\JumpBoy\\android\\assets\\images\\textures\\", "textures");
+		Settings settings = new Settings();
+		settings.useIndexes = true;
+
+		TexturePacker.process(settings, "..\\android\\assets\\images\\",
+				"..\\android\\assets\\images\\textures\\", "textures");
 	}
 }

@@ -25,11 +25,12 @@ public class ContentLoader {
 	public TextureRegion jumpBoyFallRight;
 	public TextureRegion liveTexture;
 
-	public Array<TextureRegion> fireTexture;
 	public Array<TextureRegion> cashTexture;
 
 	public BitmapFont gameFont;
 
+	public Animation cashAnimation;
+	public Animation fireAnimation;
 	public Animation walkLeftAnimation;
 	public Animation walkRightAnimation;
 
@@ -44,7 +45,7 @@ public class ContentLoader {
 		jumpBoyIdleRight = new TextureRegion(jumpBoyIdleLeft);
 		jumpBoyIdleRight.flip(true, false);
 		blockTexture = atlas.findRegion("block");
-		fireTexture = convertToArrayOfTextureRegion(atlas.findRegions("fire"));
+		fireAnimation = new Animation(0.1f, atlas.findRegions("fire"));
 		cashTexture = convertToArrayOfTextureRegion(atlas.findRegions("cash"));
 		liveTexture = atlas.findRegion("heart");
 		AtlasRegion[] walkLeftFrames = new AtlasRegion[5];
@@ -70,11 +71,9 @@ public class ContentLoader {
 	}
 
 	private Array<TextureRegion> convertToArrayOfTextureRegion(Array<AtlasRegion> array) {
-		Array<TextureRegion> res = new Array<TextureRegion>();
-		for (AtlasRegion ar : array) {
-			res.add(ar);
-		}
-		return res;
+		Array<TextureRegion> result = new Array<TextureRegion>();
+		result.addAll(array);
+		return result;
 	}
 
 	private void loadFont() {
