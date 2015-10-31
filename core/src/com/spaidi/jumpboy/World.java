@@ -15,12 +15,14 @@ import com.spaidi.jumpboy.constants.Scores;
 import com.spaidi.jumpboy.hud.Hud;
 import com.spaidi.jumpboy.utils.ContentLoader;
 import com.spaidi.jumpboy.utils.levelloader.LevelLoader;
+import com.spaidi.jumpboy.view.WorldRenderer;
 
 public class World {
 
 	private final static int VISIBILITY_X_LIMIT = 5;
 	private final static int VISIBILITY_Y_LIMIT = 4;
 
+	private WorldRenderer renderer;
 	private JumpBoy jumpBoy;
 	private Level level;
 	private Hud hud;
@@ -32,6 +34,14 @@ public class World {
 
 	public World() {
 		createDemoWorld();
+	}
+
+	public void setRenderer(WorldRenderer renderer) {
+		this.renderer = renderer;
+	}
+
+	public WorldRenderer getRenderer() {
+		return renderer;
 	}
 
 	private void createDemoWorld() {
@@ -89,14 +99,14 @@ public class World {
 	}
 
 	public Vector2 getVisibleXBounds() {
-		int x = Math.max(0, (int) jumpBoy.getPosition().x - VISIBILITY_X_LIMIT);
-		int x2 = Math.min(level.getWidth() - 1, (int) (jumpBoy.getPosition().x + VISIBILITY_X_LIMIT));
+		int x = Math.max(0, (int) renderer.getCam().position.x - VISIBILITY_X_LIMIT);
+		int x2 = Math.min(level.getWidth() - 1, (int) (renderer.getCam().position.x + VISIBILITY_X_LIMIT));
 		return new Vector2(x, x2);
 	}
 
 	public Vector2 getVisibleYBounds() {
-		int y = Math.max(0, (int) jumpBoy.getPosition().y - VISIBILITY_Y_LIMIT);
-		int y2 = Math.min(level.getHeight() - 1, (int) (jumpBoy.getPosition().y + VISIBILITY_Y_LIMIT));
+		int y = Math.max(0, (int) renderer.getCam().position.y - VISIBILITY_Y_LIMIT);
+		int y2 = Math.min(level.getHeight() - 1, (int) (renderer.getCam().position.y + VISIBILITY_Y_LIMIT));
 		return new Vector2(y, y2);
 	}
 

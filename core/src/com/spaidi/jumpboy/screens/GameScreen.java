@@ -20,8 +20,11 @@ public class GameScreen implements Screen, InputProcessor {
 	@Override
 	public void show() {
 		world = new World();
-		renderer = new WorldRenderer(world, false);
-		controller = new WorldController(world);
+		renderer = new WorldRenderer(false);
+		controller = new WorldController();
+		world.setRenderer(renderer);
+		renderer.setWorld(world);
+		controller.setWorld(world);
 		Gdx.input.setInputProcessor(this);
 	}
 
@@ -63,19 +66,47 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		if (keycode == Keys.LEFT) controller.leftPressed();
-		if (keycode == Keys.RIGHT) controller.rightPressed();
-		if (keycode == Keys.UP) controller.jumpPressed();
-		if (keycode == Keys.CONTROL_LEFT) controller.firePressed();
+		if (keycode == Keys.LEFT) {
+			controller.leftPressed();
+		}
+		if (keycode == Keys.RIGHT) {
+			controller.rightPressed();
+		}
+		if (keycode == Keys.UP) {
+			controller.jumpPressed();
+		}
+		if (keycode == Keys.DOWN) {
+			controller.downPressed();
+		}
+		if (keycode == Keys.CONTROL_LEFT) {
+			controller.firePressed();
+		}
+		if (keycode == Keys.ALT_LEFT) {
+			controller.altPressed();
+		}
 		return true;
 	}
 
 	@Override
 	public boolean keyUp(int keycode) {
-		if (keycode == Keys.LEFT) controller.leftReleased();
-		if (keycode == Keys.RIGHT) controller.rightReleased();
-		if (keycode == Keys.UP) controller.jumpReleased();
-		if (keycode == Keys.CONTROL_LEFT) controller.fireReleased();
+		if (keycode == Keys.LEFT) {
+			controller.leftReleased();
+		}
+		if (keycode == Keys.RIGHT) {
+			controller.rightReleased();
+		}
+		if (keycode == Keys.UP) {
+			controller.jumpReleased();
+		}
+		if (keycode == Keys.DOWN) {
+			controller.downReleased();
+		}
+		if (keycode == Keys.CONTROL_LEFT) {
+			controller.fireReleased();
+		}
+		if (keycode == Keys.ALT_LEFT) {
+			controller.altReleased();
+		}
 		return true;
 	}
 

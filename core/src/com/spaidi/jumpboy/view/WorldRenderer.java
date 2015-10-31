@@ -45,8 +45,7 @@ public class WorldRenderer {
 		this.debug = debug;
 	}
 
-	public WorldRenderer(World world, boolean debug) {
-		this.world = world;
+	public WorldRenderer(boolean debug) {
 		this.cam = new OrthographicCamera(CAMERA_WIDTH, CAMERA_HEIGHT);
 		this.cam.position.set(CAMERA_WIDTH / 2f, CAMERA_HEIGHT / 2f, 0);
 		this.cam.update();
@@ -58,10 +57,16 @@ public class WorldRenderer {
 		hudSpriteBatch = new SpriteBatch();
 	}
 
+	public void setWorld(World world) {
+		this.world = world;
+	}
+
+	public OrthographicCamera getCam() {
+		return cam;
+	}
+
 	public void render(float delta) {
 		renderingTime += delta;
-		cam.position.set(world.getJumpBoy().getPosition().x, world.getJumpBoy().getPosition().y, 0);
-		cam.update();
 		drawHud();
 		drawDrawableGameObjects();
 		drawGround();
@@ -104,7 +109,8 @@ public class WorldRenderer {
 		spriteBatch.setProjectionMatrix(cam.combined);
 		spriteBatch.begin();
 		for (DrawableGameObject dgo : world.getDrawableGameObjects(world.getLevel().getDrawableGameObjects())) {
-			spriteBatch.draw(dgo.getCurrentTexture(), dgo.getPosition().x, dgo.getPosition().y, dgo.getWidth(), dgo.getHeight());
+			spriteBatch.draw(dgo.getCurrentTexture(), dgo.getPosition().x, dgo.getPosition().y, dgo.getWidth(), dgo
+					.getHeight());
 		}
 		spriteBatch.end();
 	}
@@ -128,8 +134,8 @@ public class WorldRenderer {
 		JumpBoy jumpBoy = world.getJumpBoy();
 		getCL().jumpBoyFrame = jumpBoy.isFacingLeft() ? getCL().jumpBoyIdleLeft : getCL().jumpBoyIdleRight;
 		if (jumpBoy.getState().equals(State.WALKING)) {
-			getCL().jumpBoyFrame = jumpBoy.isFacingLeft() ? getCL().walkLeftAnimation.getKeyFrame(jumpBoy.getStateTime(), true) :
-					getCL().walkRightAnimation.getKeyFrame(jumpBoy.getStateTime(), true);
+			getCL().jumpBoyFrame = jumpBoy.isFacingLeft() ? getCL().walkLeftAnimation.getKeyFrame(jumpBoy
+					.getStateTime(), true) : getCL().walkRightAnimation.getKeyFrame(jumpBoy.getStateTime(), true);
 		} else if (jumpBoy.getState().equals(State.JUMPING)) {
 			if (jumpBoy.getVelocity().y > 0) {
 				getCL().jumpBoyFrame = jumpBoy.isFacingLeft() ? getCL().jumpBoyJumpLeft : getCL().jumpBoyJumpRight;
@@ -137,7 +143,8 @@ public class WorldRenderer {
 				getCL().jumpBoyFrame = jumpBoy.isFacingLeft() ? getCL().jumpBoyFallLeft : getCL().jumpBoyFallRight;
 			}
 		}
-		spriteBatch.draw(getCL().jumpBoyFrame, jumpBoy.getPosition().x, jumpBoy.getPosition().y, jumpBoy.getWidth(), jumpBoy.getHeight());
+		spriteBatch.draw(getCL().jumpBoyFrame, jumpBoy.getPosition().x, jumpBoy.getPosition().y, jumpBoy.getWidth(),
+				jumpBoy.getHeight());
 		spriteBatch.end();
 	}
 

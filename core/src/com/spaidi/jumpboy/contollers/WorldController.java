@@ -3,6 +3,7 @@ package com.spaidi.jumpboy.contollers;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
@@ -16,18 +17,20 @@ import com.spaidi.jumpboy.actors.jumpboy.JumpBoy.State;
 public class WorldController {
 
 	enum Keys {
-		LEFT, RIGHT, JUMP, FIRE
+		LEFT, RIGHT, JUMP, FIRE, ALT, DOWN
 	}
 
 	private static final long LONG_JUMP_PRESS = 150l;
 	private static final float ACCELERATION = 30f;
 	private static final float GRAVITY = -30f;
 	private static final float MAX_JUMP_SPEED = 11f;
+	private static final float MAX_CAM_SPEED = 0.15f;
 	private static final float DAMP = 0.90f;
 	private static final float MAX_VEL = 4f;
 
 	private World world;
 	private JumpBoy jumpBoy;
+	private OrthographicCamera cam;
 	private long jumpPressedTime;
 	private boolean jumpingPressed;
 	private boolean grounded = false;
@@ -42,54 +45,76 @@ public class WorldController {
 	};
 
 	static Map<Keys, Boolean> keys = new HashMap<WorldController.Keys, Boolean>();
+
 	static {
 		keys.put(Keys.LEFT, false);
 		keys.put(Keys.RIGHT, false);
 		keys.put(Keys.JUMP, false);
+		keys.put(Keys.DOWN, false);
 		keys.put(Keys.FIRE, false);
+		keys.put(Keys.ALT, false);
 	};
 
 	// GameObjects that JumpBoy can collide with any given frame
 	private Array<GameObject> collidable = new Array<GameObject>();
 
-	public WorldController(World world) {
+	public WorldController() {}
+
+	public void setWorld(World world) {
 		this.world = world;
+		this.cam = world.getRenderer().getCam();
 		this.jumpBoy = world.getJumpBoy();
 	}
 
 	// ** Key presses and touches **************** //
 
 	public void leftPressed() {
-		keys.get(keys.put(Keys.LEFT, true));
+		keys.put(Keys.LEFT, true);
 	}
 
 	public void rightPressed() {
-		keys.get(keys.put(Keys.RIGHT, true));
+		keys.put(Keys.RIGHT, true);
 	}
 
 	public void jumpPressed() {
-		keys.get(keys.put(Keys.JUMP, true));
+		keys.put(Keys.JUMP, true);
+	}
+
+	public void downPressed() {
+		keys.put(Keys.DOWN, true);
+	}
+
+	public void altPressed() {
+		keys.put(Keys.ALT, true);
 	}
 
 	public void firePressed() {
-		keys.get(keys.put(Keys.FIRE, true));
+		keys.put(Keys.FIRE, true);
 	}
 
 	public void leftReleased() {
-		keys.get(keys.put(Keys.LEFT, false));
+		keys.put(Keys.LEFT, false);
 	}
 
 	public void rightReleased() {
-		keys.get(keys.put(Keys.RIGHT, false));
+		keys.put(Keys.RIGHT, false);
 	}
 
 	public void jumpReleased() {
-		keys.get(keys.put(Keys.JUMP, false));
+		keys.put(Keys.JUMP, false);
 		jumpingPressed = false;
 	}
 
+	public void downReleased() {
+		keys.put(Keys.DOWN, false);
+	}
+
 	public void fireReleased() {
-		keys.get(keys.put(Keys.FIRE, false));
+		keys.put(Keys.FIRE, false);
+	}
+
+	public void altReleased() {
+		keys.put(Keys.ALT, false);
 	}
 
 	/** The main update method **/
@@ -150,7 +175,8 @@ public class WorldController {
 		// Obtain the rectangle from the pool instead of instantiating it
 		Rectangle jumpBoyRect = rectPool.obtain();
 		// set the rectangle to JumpBoy's bounding box
-		jumpBoyRect.set(jumpBoy.getBounds().x, jumpBoy.getBounds().y, jumpBoy.getBounds().width, jumpBoy.getBounds().height);
+		jumpBoyRect.set(jumpBoy.getBounds().x, jumpBoy.getBounds().y, jumpBoy.getBounds().width, jumpBoy
+				.getBounds().height);
 
 		// we first check the movement on the horizontal X axis
 		int startX, endX;
@@ -177,7 +203,9 @@ public class WorldController {
 
 		// if JumpBoy collides, make his horizontal velocity 0
 		for (GameObject gameObject : collidable) {
-			if (gameObject == null) continue;
+			if (gameObject == null) {
+				continue;
+			}
 			if (jumpBoyRect.overlaps(gameObject.getBounds())) {
 				if (handleCollision(gameObject)) {
 					jumpBoy.getVelocity().x = 0;
@@ -204,7 +232,9 @@ public class WorldController {
 		jumpBoyRect.y += jumpBoy.getVelocity().y;
 
 		for (GameObject gameObject : collidable) {
-			if (gameObject == null) continue;
+			if (gameObject == null) {
+				continue;
+			}
 			if (jumpBoyRect.overlaps(gameObject.getBounds())) {
 				if (handleCollision(gameObject)) {
 					if (jumpBoy.getVelocity().y < 0) {
@@ -255,44 +285,62 @@ public class WorldController {
 
 	/** Change JumpBoy's state and parameters based on input controls **/
 	private boolean processInput() {
-		if (keys.get(Keys.JUMP)) {
-			if (!jumpBoy.getState().equals(State.JUMPING)) {
-				jumpingPressed = true;
-				jumpPressedTime = System.currentTimeMillis();
-				jumpBoy.setState(State.JUMPING);
-				jumpBoy.getVelocity().y = MAX_JUMP_SPEED;
-				grounded = false;
-			} else {
-				if (jumpingPressed && ((System.currentTimeMillis() - jumpPressedTime) >= LONG_JUMP_PRESS)) {
-					jumpingPressed = false;
+		if (keys.get(Keys.ALT)) {
+			jumpBoy.setState(State.IDLE);
+			if (keys.get(Keys.LEFT)) {
+				cam.position.x -= MAX_CAM_SPEED;
+			}
+			if (keys.get(Keys.RIGHT)) {
+				cam.position.x += MAX_CAM_SPEED;
+			}
+			if (keys.get(Keys.JUMP)) {
+				cam.position.y += MAX_CAM_SPEED;
+			}
+			if (keys.get(Keys.DOWN)) {
+				cam.position.y -= MAX_CAM_SPEED;
+			}
+		} else {
+			cam.position.set(jumpBoy.getPosition().x, jumpBoy.getPosition().y, 0);
+			if (keys.get(Keys.JUMP)) {
+				if (!jumpBoy.getState().equals(State.JUMPING)) {
+					jumpingPressed = true;
+					jumpPressedTime = System.currentTimeMillis();
+					jumpBoy.setState(State.JUMPING);
+					jumpBoy.getVelocity().y = MAX_JUMP_SPEED;
+					grounded = false;
 				} else {
-					if (jumpingPressed) {
-						jumpBoy.getVelocity().y = MAX_JUMP_SPEED;
+					if (jumpingPressed && ((System.currentTimeMillis() - jumpPressedTime) >= LONG_JUMP_PRESS)) {
+						jumpingPressed = false;
+					} else {
+						if (jumpingPressed) {
+							jumpBoy.getVelocity().y = MAX_JUMP_SPEED;
+						}
 					}
 				}
 			}
-		}
-		if (keys.get(Keys.LEFT)) {
-			// left is pressed
-			jumpBoy.setFacingLeft(true);
-			if (!jumpBoy.getState().equals(State.JUMPING)) {
-				jumpBoy.setState(State.WALKING);
-			}
-			jumpBoy.getAcceleration().x = -ACCELERATION;
-		} else if (keys.get(Keys.RIGHT)) {
-			// left is pressed
-			jumpBoy.setFacingLeft(false);
-			if (!jumpBoy.getState().equals(State.JUMPING)) {
-				jumpBoy.setState(State.WALKING);
-			}
-			jumpBoy.getAcceleration().x = ACCELERATION;
-		} else {
-			if (!jumpBoy.getState().equals(State.JUMPING)) {
-				jumpBoy.setState(State.IDLE);
-			}
-			jumpBoy.getAcceleration().x = 0;
+			if (keys.get(Keys.LEFT)) {
+				// left is pressed
+				jumpBoy.setFacingLeft(true);
+				if (!jumpBoy.getState().equals(State.JUMPING)) {
+					jumpBoy.setState(State.WALKING);
+				}
+				jumpBoy.getAcceleration().x = -ACCELERATION;
+			} else if (keys.get(Keys.RIGHT)) {
+				// left is pressed
+				jumpBoy.setFacingLeft(false);
+				if (!jumpBoy.getState().equals(State.JUMPING)) {
+					jumpBoy.setState(State.WALKING);
+				}
+				jumpBoy.getAcceleration().x = ACCELERATION;
+			} else {
+				if (!jumpBoy.getState().equals(State.JUMPING)) {
+					jumpBoy.setState(State.IDLE);
+				}
+				jumpBoy.getAcceleration().x = 0;
 
+			}
 		}
+		cam.update();
 		return false;
 	}
 }
