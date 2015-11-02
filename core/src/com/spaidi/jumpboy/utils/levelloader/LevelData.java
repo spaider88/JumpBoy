@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.spaidi.jumpboy.actors.DrawableGameObject;
 import com.spaidi.jumpboy.actors.blocks.Block;
+import com.spaidi.jumpboy.actors.blocks.Exit;
 import com.spaidi.jumpboy.actors.items.Money;
 import com.spaidi.jumpboy.actors.levels.Level;
 import com.spaidi.jumpboy.constants.GameObjectTypes;
@@ -85,18 +86,21 @@ public class LevelData {
 		return createdGameObjects;
 	}
 
-	private <T> void populateGameObjects(DrawableGameObject[][] drawableGameObjects, ContentLoader contentLoader) {
+	private void populateGameObjects(DrawableGameObject[][] drawableGameObjects, ContentLoader contentLoader) {
 		for (GameObjectData gameObject : gameObjects) {
 			GameObjectTypes gameObjectType = GameObjectTypes.fromString(gameObject.getType());
 			switch (gameObjectType) {
 				case BLOCK:
-					addBlock(gameObject, drawableGameObjects, contentLoader);
+					addDrawable(new Block(), gameObject, drawableGameObjects, contentLoader.blockTexture);
 					break;
 				case CASH:
 					addMoney(gameObject, drawableGameObjects, contentLoader.cashTexture);
 					break;
 				case COIN:
 					addMoney(gameObject, drawableGameObjects, contentLoader.coinTexture);
+					break;
+				case EXIT:
+					addDrawable(new Exit(), gameObject, drawableGameObjects, contentLoader.exitTexture);
 					break;
 				default:
 					break;
@@ -105,19 +109,26 @@ public class LevelData {
 		}
 	}
 
-	private void addBlock(GameObjectData gameObject, DrawableGameObject[][] drawableGameObjects,
-			ContentLoader contentLoader) {
-		Block block = new Block(new Vector2(gameObject.getX(), gameObject.getY()));
-		block.setWidth(gameObject.getWidth());
-		block.setHeight(gameObject.getHeight());
-		block.addTexture(contentLoader.blockTexture);
-		drawableGameObjects[gameObject.getX()][gameObject.getY()] = block;
+	private void addMoney(GameObjectData gameObjectData, DrawableGameObject[][] drawableGameObjects,
+			Array<TextureRegion> texture) {
+		Money money = new Money();
+		addDrawable(money, gameObjectData, drawableGameObjects, texture);
+		money.randomizeParameters();
 	}
 
-	private void addMoney(GameObjectData gameObject, DrawableGameObject[][] createdGameObjects,
-			Array<TextureRegion> textures) {
-		Money cash = new Money(new Vector2(gameObject.getX(), gameObject.getY()));
-		cash.setTextures(textures);
-		createdGameObjects[gameObject.getX()][gameObject.getY()] = cash;
+	private void addDrawable(DrawableGameObject obj, GameObjectData gameObjectData,
+			DrawableGameObject[][] drawableGameObjects,
+			Array<TextureRegion> texture) {
+		obj.setPosition(new Vector2(gameObjectData.getX(), gameObjectData.getY()));
+		obj.setWidth(gameObjectData.getWidth());
+		obj.setHeight(gameObjectData.getHeight());
+		obj.setTextures(texture);
+		drawableGameObjects[gameObjectData.getX()][gameObjectData.getY()] = obj;
+	}
+
+	private void addDrawable(DrawableGameObject obj, GameObjectData gameObjectData,
+			DrawableGameObject[][] drawableGameObjects,
+			TextureRegion ... texture) {
+		addDrawable(obj, gameObjectData, drawableGameObjects, new Array<TextureRegion>(texture));
 	}
 }

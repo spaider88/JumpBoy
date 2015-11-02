@@ -7,6 +7,10 @@ import com.spaidi.jumpboy.actors.behaviours.Drawable;
 
 public abstract class DrawableGameObject extends GameObject implements Drawable {
 
+	public DrawableGameObject() {
+		super();
+	}
+
 	public DrawableGameObject(Vector2 position) {
 		super(position);
 	}
@@ -14,8 +18,7 @@ public abstract class DrawableGameObject extends GameObject implements Drawable 
 	private Array<TextureRegion> textures = new Array<TextureRegion>();
 
 	@Override
-	public void update(float deltaTime) {
-	}
+	public void update(float deltaTime) {}
 
 	@Override
 	public Array<TextureRegion> getTextures() {

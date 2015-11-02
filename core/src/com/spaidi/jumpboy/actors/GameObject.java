@@ -10,10 +10,12 @@ public abstract class GameObject implements Collisionable {
 	private Vector2 position = new Vector2();
 	private Rectangle bounds = new Rectangle();
 
+	public GameObject() {
+		this(new Vector2());
+	}
+
 	public GameObject(Vector2 position) {
-		this.position = position;
-		this.bounds.setX(position.x);
-		this.bounds.setY(position.y);
+		setPosition(position);
 		this.bounds.width = DEFAULT_SIZE;
 		this.bounds.height = DEFAULT_SIZE;
 	}
@@ -21,6 +23,8 @@ public abstract class GameObject implements Collisionable {
 	@Override
 	public void setPosition(Vector2 position) {
 		this.position = position;
+		this.bounds.setX(position.x);
+		this.bounds.setY(position.y);
 	}
 
 	@Override

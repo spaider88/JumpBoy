@@ -6,7 +6,7 @@ import com.spaidi.jumpboy.actors.behaviours.Moveable;
 
 public class JumpBoy extends GameObject implements Moveable {
 
-	public static final float DEFAULT_SIZE = 0.5f; // unit per second
+	public static final float DEFAULT_SIZE = 0.55f; // unit per second
 
 	public enum State {
 		IDLE, WALKING, JUMPING, DYING

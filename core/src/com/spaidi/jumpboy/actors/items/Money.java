@@ -4,7 +4,6 @@ import java.util.Random;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.spaidi.jumpboy.actors.DrawableGameObject;
 import com.spaidi.jumpboy.actors.behaviours.Destroyable;
@@ -20,16 +19,15 @@ public class Money extends DrawableGameObject implements Scoreable, Destroyable 
 
 	private Animation cashAnimation;
 
-	public Money(Vector2 position) {
-		super(position);
-		generateCashSize();
-		generateStartLiveTime();
-	}
-
 	@Override
 	public void setTextures(Array<TextureRegion> textures) {
 		cashAnimation = new Animation(CASH_FRAME_DURATION, textures);
 		super.setTextures(textures);
+	}
+
+	public void randomizeParameters() {
+		generateCashSize();
+		generateStartLiveTime();
 	}
 
 	private void generateCashSize() {
