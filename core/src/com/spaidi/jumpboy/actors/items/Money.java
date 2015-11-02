@@ -11,7 +11,7 @@ import com.spaidi.jumpboy.actors.behaviours.Destroyable;
 import com.spaidi.jumpboy.actors.behaviours.Scoreable;
 import com.spaidi.jumpboy.constants.Scores;
 
-public class Cash extends DrawableGameObject implements Scoreable, Destroyable {
+public class Money extends DrawableGameObject implements Scoreable, Destroyable {
 
 	private static final float CASH_FRAME_DURATION = 0.08f;
 
@@ -20,7 +20,7 @@ public class Cash extends DrawableGameObject implements Scoreable, Destroyable {
 
 	private Animation cashAnimation;
 
-	public Cash(Vector2 position) {
+	public Money(Vector2 position) {
 		super(position);
 		generateCashSize();
 		generateStartLiveTime();

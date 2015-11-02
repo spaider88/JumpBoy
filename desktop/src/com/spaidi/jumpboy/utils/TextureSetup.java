@@ -11,5 +11,10 @@ public class TextureSetup {
 
 		TexturePacker.process(settings, "..\\android\\assets\\images\\",
 				"..\\android\\assets\\images\\textures\\", "textures");
+		// TextureUnpacker unpacker = new TextureUnpacker();
+		// TextureAtlasData data = new TextureAtlasData(new FileHandle(
+		// "..\\android\\assets\\images\\textures\\textures.atlas"),
+		// new FileHandle("..\\android\\assets\\images\\textures\\"), false);
+		// unpacker.splitAtlas(data, "..\\android\\assets\\images\\");
 	}
 }

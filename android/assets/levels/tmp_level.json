@@ -1,13 +1,13 @@
 {
 	"name": "Test level",
-	"width": 100,
+	"width": 30,
 	"height": 10,
 	"startPosition": {"x":0,"y":4},
 	"gameObjects":[
 		{"x":1,"y":3,"type":"cash"},
-		{"x":5,"y":5,"type":"cash"},
+		{"x":5,"y":5,"type":"coin"},
 		{"x":7,"y":2,"type":"cash"},
-		{"x":2,"y":8,"type":"cash"},
+		{"x":2,"y":8,"type":"coin"},
 		{"x":0,"y":9},
 		{"x":1,"y":9},
 		{"x":2,"y":9},

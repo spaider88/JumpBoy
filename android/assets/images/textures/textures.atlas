@@ -13,7 +13,7 @@ block
   index: -1
 cash
   rotate: false
-  xy: 541, 71
+  xy: 856, 71
   size: 50, 46
   orig: 50, 46
   offset: 0, 0
@@ -27,7 +27,7 @@ cash
   index: 1
 cash
   rotate: false
-  xy: 593, 71
+  xy: 908, 71
   size: 50, 46
   orig: 50, 46
   offset: 0, 0
@@ -41,7 +41,7 @@ cash
   index: 3
 cash
   rotate: false
-  xy: 645, 71
+  xy: 960, 71
   size: 50, 46
   orig: 50, 46
   offset: 0, 0
@@ -55,18 +55,109 @@ cash
   index: 5
 cash
   rotate: false
-  xy: 697, 71
+  xy: 208, 4
   size: 50, 46
   orig: 50, 46
   offset: 0, 0
   index: 6
 cash
   rotate: false
-  xy: 208, 4
+  xy: 260, 4
   size: 50, 46
   orig: 50, 46
   offset: 0, 0
   index: 7
+coin
+  rotate: false
+  xy: 856, 37
+  size: 30, 32
+  orig: 30, 32
+  offset: 0, 0
+  index: 1
+coin
+  rotate: false
+  xy: 312, 18
+  size: 30, 32
+  orig: 30, 32
+  offset: 0, 0
+  index: 2
+coin
+  rotate: false
+  xy: 888, 37
+  size: 30, 32
+  orig: 30, 32
+  offset: 0, 0
+  index: 3
+coin
+  rotate: false
+  xy: 344, 18
+  size: 30, 32
+  orig: 30, 32
+  offset: 0, 0
+  index: 4
+coin
+  rotate: false
+  xy: 920, 37
+  size: 30, 32
+  orig: 30, 32
+  offset: 0, 0
+  index: 5
+coin
+  rotate: false
+  xy: 376, 18
+  size: 30, 32
+  orig: 30, 32
+  offset: 0, 0
+  index: 6
+coin
+  rotate: false
+  xy: 952, 37
+  size: 30, 32
+  orig: 30, 32
+  offset: 0, 0
+  index: 7
+coin
+  rotate: false
+  xy: 408, 18
+  size: 30, 32
+  orig: 30, 32
+  offset: 0, 0
+  index: 8
+door
+  rotate: false
+  xy: 541, 32
+  size: 61, 85
+  orig: 61, 85
+  offset: 0, 0
+  index: 1
+door
+  rotate: false
+  xy: 604, 32
+  size: 61, 85
+  orig: 61, 85
+  offset: 0, 0
+  index: 2
+door
+  rotate: false
+  xy: 667, 32
+  size: 61, 85
+  orig: 61, 85
+  offset: 0, 0
+  index: 3
+door
+  rotate: false
+  xy: 730, 32
+  size: 61, 85
+  orig: 61, 85
+  offset: 0, 0
+  index: 4
+door
+  rotate: false
+  xy: 793, 32
+  size: 61, 85
+  orig: 61, 85
+  offset: 0, 0
+  index: 5
 fire
   rotate: false
   xy: 2, 52
@@ -104,56 +195,56 @@ heart
   index: -1
 jump-boy-01
   rotate: false
-  xy: 749, 89
+  xy: 984, 41
   size: 24, 28
   orig: 24, 28
   offset: 0, 0
   index: -1
 jump-boy-02
   rotate: false
-  xy: 260, 22
+  xy: 440, 22
   size: 24, 28
   orig: 24, 28
   offset: 0, 0
   index: -1
 jump-boy-03
   rotate: false
-  xy: 827, 91
+  xy: 856, 9
   size: 24, 26
   orig: 24, 26
   offset: 0, 0
   index: -1
 jump-boy-04
   rotate: false
-  xy: 338, 24
+  xy: 882, 9
   size: 24, 26
   orig: 24, 26
   offset: 0, 0
   index: -1
 jump-boy-05
   rotate: false
-  xy: 775, 89
+  xy: 466, 22
   size: 24, 28
   orig: 24, 28
   offset: 0, 0
   index: -1
 jump-boy-06
   rotate: false
-  xy: 286, 22
+  xy: 492, 22
   size: 24, 28
   orig: 24, 28
   offset: 0, 0
   index: -1
 jump-boy-down
   rotate: false
-  xy: 801, 89
+  xy: 908, 7
   size: 24, 28
   orig: 24, 28
   offset: 0, 0
   index: -1
 jump-boy-up
   rotate: false
-  xy: 312, 22
+  xy: 934, 7
   size: 24, 28
   orig: 24, 28
   offset: 0, 0

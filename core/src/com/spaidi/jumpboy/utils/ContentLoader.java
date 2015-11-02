@@ -25,11 +25,11 @@ public class ContentLoader {
 	public TextureRegion jumpBoyFallRight;
 	public TextureRegion liveTexture;
 
+	public Array<TextureRegion> coinTexture;
 	public Array<TextureRegion> cashTexture;
 
 	public BitmapFont gameFont;
 
-	public Animation cashAnimation;
 	public Animation fireAnimation;
 	public Animation walkLeftAnimation;
 	public Animation walkRightAnimation;
@@ -47,6 +47,7 @@ public class ContentLoader {
 		blockTexture = atlas.findRegion("block");
 		fireAnimation = new Animation(0.1f, atlas.findRegions("fire"));
 		cashTexture = convertToArrayOfTextureRegion(atlas.findRegions("cash"));
+		coinTexture = convertToArrayOfTextureRegion(atlas.findRegions("coin"));
 		liveTexture = atlas.findRegion("heart");
 		AtlasRegion[] walkLeftFrames = new AtlasRegion[5];
 		for (int i = 0; i < 5; i++) {

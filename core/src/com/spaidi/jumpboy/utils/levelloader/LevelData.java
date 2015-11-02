@@ -2,10 +2,12 @@ package com.spaidi.jumpboy.utils.levelloader;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.spaidi.jumpboy.actors.DrawableGameObject;
 import com.spaidi.jumpboy.actors.blocks.Block;
-import com.spaidi.jumpboy.actors.items.Cash;
+import com.spaidi.jumpboy.actors.items.Money;
 import com.spaidi.jumpboy.actors.levels.Level;
 import com.spaidi.jumpboy.constants.GameObjectTypes;
 import com.spaidi.jumpboy.constants.GroundTypes;
@@ -91,7 +93,10 @@ public class LevelData {
 					addBlock(gameObject, drawableGameObjects, contentLoader);
 					break;
 				case CASH:
-					addCash(gameObject, drawableGameObjects, contentLoader);
+					addMoney(gameObject, drawableGameObjects, contentLoader.cashTexture);
+					break;
+				case COIN:
+					addMoney(gameObject, drawableGameObjects, contentLoader.coinTexture);
 					break;
 				default:
 					break;
@@ -100,7 +105,8 @@ public class LevelData {
 		}
 	}
 
-	private void addBlock(GameObjectData gameObject, DrawableGameObject[][] drawableGameObjects, ContentLoader contentLoader) {
+	private void addBlock(GameObjectData gameObject, DrawableGameObject[][] drawableGameObjects,
+			ContentLoader contentLoader) {
 		Block block = new Block(new Vector2(gameObject.getX(), gameObject.getY()));
 		block.setWidth(gameObject.getWidth());
 		block.setHeight(gameObject.getHeight());
@@ -108,9 +114,10 @@ public class LevelData {
 		drawableGameObjects[gameObject.getX()][gameObject.getY()] = block;
 	}
 
-	private void addCash(GameObjectData gameObject, DrawableGameObject[][] createdGameObjects, ContentLoader contentLoader) {
-		Cash cash = new Cash(new Vector2(gameObject.getX(), gameObject.getY()));
-		cash.setTextures(contentLoader.cashTexture);
+	private void addMoney(GameObjectData gameObject, DrawableGameObject[][] createdGameObjects,
+			Array<TextureRegion> textures) {
+		Money cash = new Money(new Vector2(gameObject.getX(), gameObject.getY()));
+		cash.setTextures(textures);
 		createdGameObjects[gameObject.getX()][gameObject.getY()] = cash;
 	}
 }

@@ -3,7 +3,7 @@ package com.spaidi.jumpboy.constants;
 import com.spaidi.jumpboy.exceptions.TypeNotFoundException;
 
 public enum GameObjectTypes {
-	BLOCK("block"), CASH("cash");
+	BLOCK("block"), CASH("cash"), COIN("coin");
 	private String name;
 
 	private GameObjectTypes(String name) {
@@ -21,6 +21,8 @@ public enum GameObjectTypes {
 			return BLOCK;
 		} else if (CASH.name.toLowerCase().equals(name)) {
 			return CASH;
+		} else if (COIN.name.toLowerCase().equals(name)) {
+			return COIN;
 		} else {
 			throw new TypeNotFoundException("GameObjectsTypes not found");
 		}
