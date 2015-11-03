@@ -138,4 +138,8 @@ public class World {
 			}
 		}
 	}
+
+	public void endLevel() {
+		addGameMessage(Messages.LEVEL_COMPLETED);
+	}
 }

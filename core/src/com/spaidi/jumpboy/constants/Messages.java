@@ -1,7 +1,7 @@
 package com.spaidi.jumpboy.constants;
 
 public enum Messages {
-	GAME_OVER("Game Over!");
+	GAME_OVER("Game Over!"), LEVEL_COMPLETED("Level Completed!");
 
 	private String message;
 

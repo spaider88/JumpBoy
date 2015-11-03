@@ -11,6 +11,7 @@ import com.spaidi.jumpboy.World;
 import com.spaidi.jumpboy.actors.GameObject;
 import com.spaidi.jumpboy.actors.behaviours.Destroyable;
 import com.spaidi.jumpboy.actors.behaviours.Scoreable;
+import com.spaidi.jumpboy.actors.blocks.Exit;
 import com.spaidi.jumpboy.actors.jumpboy.JumpBoy;
 import com.spaidi.jumpboy.actors.jumpboy.JumpBoy.State;
 
@@ -161,8 +162,7 @@ public class WorldController {
 	private void checkIfJumpBoyTouchTheGround() {
 		int endY = (int) (jumpBoy.getBounds().y + jumpBoy.getBounds().height);
 		if (endY <= 0) {
-			jumpBoy.getAcceleration().scl(0.0f);
-			jumpBoy.getVelocity().scl(0.0f);
+			jumpBoy.stop();
 			world.killJumpBoy();
 		}
 	}
@@ -265,6 +265,11 @@ public class WorldController {
 			((Destroyable) gameObject).destroy();
 			world.getLevel().destroyGameObject(gameObject);
 			blockPlayer = false;
+		}
+		if (gameObject instanceof Exit) {
+			((Exit) gameObject).reached();
+			jumpBoy.stop();
+			world.endLevel();
 		}
 		return blockPlayer;
 	}

@@ -68,4 +68,9 @@ public class JumpBoy extends GameObject implements Moveable {
 		stateTime += delta;
 		getPosition().add(velocity.cpy().scl(delta));
 	}
+
+	public void stop() {
+		getAcceleration().scl(0.0f);
+		getVelocity().scl(0.0f);
+	}
 }
