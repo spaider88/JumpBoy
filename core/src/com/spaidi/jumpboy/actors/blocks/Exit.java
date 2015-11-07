@@ -1,13 +1,15 @@
 package com.spaidi.jumpboy.actors.blocks;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.spaidi.jumpboy.actors.DrawableGameObject;
+import com.spaidi.jumpboy.actors.behaviours.Changable;
 import com.spaidi.jumpboy.actors.behaviours.Scoreable;
 import com.spaidi.jumpboy.constants.Scores;
 
-public class Exit extends DrawableGameObject implements Scoreable {
+public class Exit extends DrawableGameObject implements Scoreable, Changable {
 
 	private static final float EXIT_FRAME_DURATION = 0.11f;
 
@@ -41,5 +43,10 @@ public class Exit extends DrawableGameObject implements Scoreable {
 	@Override
 	public long score() {
 		return Scores.END_LEVEL.getPoints();
+	}
+
+	@Override
+	public Sound getCurrentSound() {
+		return getSounds().first();
 	}
 }

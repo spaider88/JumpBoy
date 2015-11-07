@@ -2,7 +2,9 @@ package com.spaidi.jumpboy.contollers;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
@@ -10,10 +12,13 @@ import com.badlogic.gdx.utils.Pool;
 import com.spaidi.jumpboy.World;
 import com.spaidi.jumpboy.actors.GameObject;
 import com.spaidi.jumpboy.actors.behaviours.Destroyable;
+import com.spaidi.jumpboy.actors.behaviours.MakeSound;
 import com.spaidi.jumpboy.actors.behaviours.Scoreable;
+import com.spaidi.jumpboy.actors.blocks.Block;
 import com.spaidi.jumpboy.actors.blocks.Exit;
 import com.spaidi.jumpboy.actors.jumpboy.JumpBoy;
 import com.spaidi.jumpboy.actors.jumpboy.JumpBoy.State;
+import com.spaidi.jumpboy.constants.CollisionTypes;
 
 public class WorldController {
 
@@ -34,7 +39,6 @@ public class WorldController {
 	private OrthographicCamera cam;
 	private long jumpPressedTime;
 	private boolean jumpingPressed;
-	private boolean grounded = false;
 
 	// This is the rectangle pool used in collision detection
 	// Good to avoid instantiation each frame
@@ -124,7 +128,7 @@ public class WorldController {
 		processInput();
 
 		// If JumpBoy is grounded then reset the state to IDLE
-		if (grounded && jumpBoy.getState().equals(State.JUMPING)) {
+		if (jumpBoy.isGrounded() && jumpBoy.getState().equals(State.JUMPING)) {
 			jumpBoy.setState(State.IDLE);
 		}
 
@@ -207,7 +211,8 @@ public class WorldController {
 				continue;
 			}
 			if (jumpBoyRect.overlaps(gameObject.getBounds())) {
-				if (handleCollision(gameObject)) {
+				if (handleCollision(gameObject, (jumpBoy.isFacingLeft() ? CollisionTypes.RIGHT
+						: CollisionTypes.LEFT))) {
 					jumpBoy.getVelocity().x = 0;
 					break;
 				}
@@ -236,9 +241,9 @@ public class WorldController {
 				continue;
 			}
 			if (jumpBoyRect.overlaps(gameObject.getBounds())) {
-				if (handleCollision(gameObject)) {
-					if (jumpBoy.getVelocity().y < 0) {
-						grounded = true;
+				if (handleCollision(gameObject, jumpBoy.isFalling() ? CollisionTypes.TOP : CollisionTypes.BOTTOM)) {
+					if (jumpBoy.isFalling()) {
+						jumpBoy.setGrounded(true);
 					}
 					jumpBoy.getVelocity().y = 0;
 					break;
@@ -255,7 +260,7 @@ public class WorldController {
 		rectPool.free(jumpBoyRect);
 	}
 
-	private boolean handleCollision(GameObject gameObject) {
+	private boolean handleCollision(GameObject gameObject, CollisionTypes type) {
 		boolean blockPlayer = true;
 		world.getCollisionRects().add(gameObject.getBounds());
 		if (gameObject instanceof Scoreable) {
@@ -270,6 +275,11 @@ public class WorldController {
 			((Exit) gameObject).reached();
 			jumpBoy.stop();
 			world.endLevel();
+		}
+		if (gameObject instanceof MakeSound) {
+			if ((!(gameObject instanceof Block)) || (type != CollisionTypes.TOP)) {
+				((MakeSound) gameObject).getCurrentSound().play();
+			}
 		}
 		return blockPlayer;
 	}
@@ -308,11 +318,13 @@ public class WorldController {
 			cam.position.set(jumpBoy.getPosition().x, jumpBoy.getPosition().y, 0);
 			if (keys.get(Keys.JUMP)) {
 				if (!jumpBoy.getState().equals(State.JUMPING)) {
+					Array<Sound> jumpSounds = world.getContentLoader().jumpSounds;
+					jumpSounds.get(new Random().nextInt(jumpSounds.size)).play();
 					jumpingPressed = true;
 					jumpPressedTime = System.currentTimeMillis();
 					jumpBoy.setState(State.JUMPING);
 					jumpBoy.getVelocity().y = MAX_JUMP_SPEED;
-					grounded = false;
+					jumpBoy.setGrounded(false);
 				} else {
 					if (jumpingPressed && ((System.currentTimeMillis() - jumpPressedTime) >= LONG_JUMP_PRESS)) {
 						jumpingPressed = false;

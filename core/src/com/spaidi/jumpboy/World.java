@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.spaidi.jumpboy.actors.DrawableGameObject;
+import com.spaidi.jumpboy.actors.behaviours.Changable;
 import com.spaidi.jumpboy.actors.jumpboy.JumpBoy;
 import com.spaidi.jumpboy.actors.levels.Level;
 import com.spaidi.jumpboy.constants.Messages;
@@ -114,12 +115,20 @@ public class World {
 		jumpBoy.setPosition(level.getStartPosition());
 	}
 
+	// tmp
+	boolean gameOverPlayed = false;
+
 	public void killJumpBoy() {
 		hud.getLives().takeLive();
 		if (hud.getLives().hasLives()) {
+			getContentLoader().death.play();
 			hud.getScore().takePoints(Scores.GAIN_LOST_LIVE.getPoints());
 			respawnJumpBoy();
 		} else {
+			if (!gameOverPlayed) {
+				gameOverPlayed = true;
+				getContentLoader().gameOver.play();
+			}
 			addGameMessage(Messages.GAME_OVER);
 		}
 	}
@@ -133,7 +142,9 @@ public class World {
 			for (int currentY = 0; currentY < level.getHeight(); currentY++) {
 				DrawableGameObject dgo = level.get(currentX, currentY);
 				if (dgo != null) {
-					dgo.update(delta);
+					if (dgo instanceof Changable) {
+						((Changable) dgo).update(delta);
+					}
 				}
 			}
 		}

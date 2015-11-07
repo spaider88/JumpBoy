@@ -2,6 +2,7 @@ package com.spaidi.jumpboy.utils.levelloader;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -91,16 +92,18 @@ public class LevelData {
 			GameObjectTypes gameObjectType = GameObjectTypes.fromString(gameObject.getType());
 			switch (gameObjectType) {
 				case BLOCK:
-					addDrawable(new Block(), gameObject, drawableGameObjects, contentLoader.blockTexture);
+					addDrawable(new Block(), gameObject, drawableGameObjects, convertToArray(
+							contentLoader.blockTexture), contentLoader.collisionSounds);
 					break;
 				case CASH:
-					addMoney(gameObject, drawableGameObjects, contentLoader.cashTexture);
+					addMoney(gameObject, drawableGameObjects, contentLoader.cashTexture, contentLoader.cashSounds);
 					break;
 				case COIN:
-					addMoney(gameObject, drawableGameObjects, contentLoader.coinTexture);
+					addMoney(gameObject, drawableGameObjects, contentLoader.coinTexture, contentLoader.coinSounds);
 					break;
 				case EXIT:
-					addDrawable(new Exit(), gameObject, drawableGameObjects, contentLoader.exitTexture);
+					addDrawable(new Exit(), gameObject, drawableGameObjects, contentLoader.exitTexture,
+							convertToArray(contentLoader.win));
 					break;
 				default:
 					break;
@@ -109,26 +112,30 @@ public class LevelData {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	private <T> Array<T> convertToArray(T ... objs) {
+		Array<T> array = new Array<T>();
+		for (T obj : objs) {
+			array.add(obj);
+		}
+		return array;
+	}
+
 	private void addMoney(GameObjectData gameObjectData, DrawableGameObject[][] drawableGameObjects,
-			Array<TextureRegion> texture) {
+			Array<TextureRegion> texture, Array<Sound> sounds) {
 		Money money = new Money();
-		addDrawable(money, gameObjectData, drawableGameObjects, texture);
+		addDrawable(money, gameObjectData, drawableGameObjects, texture, sounds);
 		money.randomizeParameters();
 	}
 
 	private void addDrawable(DrawableGameObject obj, GameObjectData gameObjectData,
 			DrawableGameObject[][] drawableGameObjects,
-			Array<TextureRegion> texture) {
+			Array<TextureRegion> texture, Array<Sound> sounds) {
 		obj.setPosition(new Vector2(gameObjectData.getX(), gameObjectData.getY()));
 		obj.setWidth(gameObjectData.getWidth());
 		obj.setHeight(gameObjectData.getHeight());
 		obj.setTextures(texture);
+		obj.setSounds(sounds);
 		drawableGameObjects[gameObjectData.getX()][gameObjectData.getY()] = obj;
-	}
-
-	private void addDrawable(DrawableGameObject obj, GameObjectData gameObjectData,
-			DrawableGameObject[][] drawableGameObjects,
-			TextureRegion ... texture) {
-		addDrawable(obj, gameObjectData, drawableGameObjects, new Array<TextureRegion>(texture));
 	}
 }

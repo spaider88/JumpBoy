@@ -1,11 +1,13 @@
 package com.spaidi.jumpboy.actors;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.spaidi.jumpboy.actors.behaviours.Drawable;
+import com.spaidi.jumpboy.actors.behaviours.MakeSound;
 
-public abstract class DrawableGameObject extends GameObject implements Drawable {
+public abstract class DrawableGameObject extends GameObject implements Drawable, MakeSound {
 
 	public DrawableGameObject() {
 		super();
@@ -16,9 +18,7 @@ public abstract class DrawableGameObject extends GameObject implements Drawable 
 	}
 
 	private Array<TextureRegion> textures = new Array<TextureRegion>();
-
-	@Override
-	public void update(float deltaTime) {}
+	private Array<Sound> sounds = new Array<Sound>();
 
 	@Override
 	public Array<TextureRegion> getTextures() {
@@ -33,5 +33,20 @@ public abstract class DrawableGameObject extends GameObject implements Drawable 
 	@Override
 	public void setTextures(Array<TextureRegion> textures) {
 		this.textures = textures;
+	}
+
+	@Override
+	public Array<Sound> getSounds() {
+		return sounds;
+	}
+
+	@Override
+	public void addSound(Sound sound) {
+		sounds.add(sound);
+	}
+
+	@Override
+	public void setSounds(Array<Sound> sounds) {
+		this.sounds = sounds;
 	}
 }

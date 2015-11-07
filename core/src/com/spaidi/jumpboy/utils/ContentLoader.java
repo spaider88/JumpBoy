@@ -1,6 +1,7 @@
 package com.spaidi.jumpboy.utils;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -29,6 +30,14 @@ public class ContentLoader {
 	public Array<TextureRegion> cashTexture;
 	public Array<TextureRegion> exitTexture;
 
+	public Array<Sound> coinSounds;
+	public Array<Sound> cashSounds;
+	public Array<Sound> collisionSounds;
+	public Array<Sound> jumpSounds;
+	public Sound death;
+	public Sound win;
+	public Sound gameOver;
+
 	public BitmapFont gameFont;
 
 	public Animation fireAnimation;
@@ -37,6 +46,7 @@ public class ContentLoader {
 
 	public void loadContent() {
 		loadTextures();
+		loadSounds();
 		loadFont();
 	}
 
@@ -71,6 +81,30 @@ public class ContentLoader {
 		jumpBoyFallLeft = atlas.findRegion("jump-boy-down");
 		jumpBoyFallRight = new TextureRegion(jumpBoyFallLeft);
 		jumpBoyFallRight.flip(true, false);
+	}
+
+	private void loadSounds() {
+		coinSounds = new Array<Sound>();
+		coinSounds.add(Gdx.audio.newSound(Gdx.files.internal("audio/coins_00.wav")));
+		coinSounds.add(Gdx.audio.newSound(Gdx.files.internal("audio/coins_01.wav")));
+		coinSounds.add(Gdx.audio.newSound(Gdx.files.internal("audio/coins_02.wav")));
+
+		cashSounds = new Array<Sound>();
+		cashSounds.add(Gdx.audio.newSound(Gdx.files.internal("audio/cash_00.wav")));
+		cashSounds.add(Gdx.audio.newSound(Gdx.files.internal("audio/cash_01.wav")));
+
+		collisionSounds = new Array<Sound>();
+		collisionSounds.add(Gdx.audio.newSound(Gdx.files.internal("audio/collision_00.wav")));
+		collisionSounds.add(Gdx.audio.newSound(Gdx.files.internal("audio/collision_01.wav")));
+
+		jumpSounds = new Array<Sound>();
+		jumpSounds.add(Gdx.audio.newSound(Gdx.files.internal("audio/jump_00.wav")));
+		jumpSounds.add(Gdx.audio.newSound(Gdx.files.internal("audio/jump_01.wav")));
+		jumpSounds.add(Gdx.audio.newSound(Gdx.files.internal("audio/jump_02.wav")));
+
+		death = Gdx.audio.newSound(Gdx.files.internal("audio/death.wav"));
+		win = Gdx.audio.newSound(Gdx.files.internal("audio/win.wav"));
+		gameOver = Gdx.audio.newSound(Gdx.files.internal("audio/game_over.wav"));
 	}
 
 	private Array<TextureRegion> convertToArrayOfTextureRegion(Array<AtlasRegion> array) {

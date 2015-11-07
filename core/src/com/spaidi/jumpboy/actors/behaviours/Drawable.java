@@ -3,7 +3,7 @@ package com.spaidi.jumpboy.actors.behaviours;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
-public interface Drawable extends Changable {
+public interface Drawable {
 
 	Array<TextureRegion> getTextures();
 

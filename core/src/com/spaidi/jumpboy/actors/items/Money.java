@@ -2,15 +2,18 @@ package com.spaidi.jumpboy.actors.items;
 
 import java.util.Random;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.spaidi.jumpboy.actors.DrawableGameObject;
+import com.spaidi.jumpboy.actors.behaviours.Changable;
 import com.spaidi.jumpboy.actors.behaviours.Destroyable;
+import com.spaidi.jumpboy.actors.behaviours.MakeSound;
 import com.spaidi.jumpboy.actors.behaviours.Scoreable;
 import com.spaidi.jumpboy.constants.Scores;
 
-public class Money extends DrawableGameObject implements Scoreable, Destroyable {
+public class Money extends DrawableGameObject implements Scoreable, Destroyable, MakeSound, Changable {
 
 	private static final float CASH_FRAME_DURATION = 0.08f;
 
@@ -61,5 +64,10 @@ public class Money extends DrawableGameObject implements Scoreable, Destroyable 
 	@Override
 	public TextureRegion getCurrentTexture() {
 		return cashAnimation.getKeyFrame(liveTime, true);
+	}
+
+	@Override
+	public Sound getCurrentSound() {
+		return getSounds().get(new Random().nextInt(getSounds().size));
 	}
 }

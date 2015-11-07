@@ -16,6 +16,7 @@ public class JumpBoy extends GameObject implements Moveable {
 	private Vector2 velocity = new Vector2();
 	private State state = State.IDLE;
 	private boolean facingLeft = true;
+	private boolean isGrounded = false;
 	private float stateTime = 0;
 
 	public JumpBoy(Vector2 position) {
@@ -41,6 +42,18 @@ public class JumpBoy extends GameObject implements Moveable {
 	@Override
 	public Vector2 getVelocity() {
 		return velocity;
+	}
+
+	public void setGrounded(boolean isGrounded) {
+		this.isGrounded = isGrounded;
+	}
+
+	public boolean isGrounded() {
+		return isGrounded;
+	}
+
+	public boolean isFalling() {
+		return velocity.y < 0;
 	}
 
 	public State getState() {
