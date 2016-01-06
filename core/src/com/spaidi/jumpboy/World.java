@@ -28,8 +28,6 @@ public class World {
 	private Level level;
 	private Hud hud;
 
-	private ContentLoader contentLoader;
-
 	private Array<Rectangle> collisionRects = new Array<Rectangle>();
 	private Array<Messages> messages = new Array<Messages>();
 
@@ -47,9 +45,7 @@ public class World {
 
 	private void createDemoWorld() {
 		try {
-			contentLoader = new ContentLoader();
-			contentLoader.loadContent();
-			level = LevelLoader.loadLevel("tmp_level", contentLoader);
+			level = LevelLoader.loadLevel("tmp_level", ContentLoader.getInstance());
 			jumpBoy = new JumpBoy(level.getStartPosition());
 			hud = new Hud();
 		} catch (IOException e) {
@@ -71,10 +67,6 @@ public class World {
 
 	public Hud getHud() {
 		return hud;
-	}
-
-	public ContentLoader getContentLoader() {
-		return contentLoader;
 	}
 
 	public Array<Messages> getMessages() {
@@ -121,13 +113,13 @@ public class World {
 	public void killJumpBoy() {
 		hud.getLives().takeLive();
 		if (hud.getLives().hasLives()) {
-			getContentLoader().death.play();
+			ContentLoader.getInstance().death.play();
 			hud.getScore().takePoints(Scores.GAIN_LOST_LIVE.getPoints());
 			respawnJumpBoy();
 		} else {
 			if (!gameOverPlayed) {
 				gameOverPlayed = true;
-				getContentLoader().gameOver.play();
+				ContentLoader.getInstance().gameOver.play();
 			}
 			addGameMessage(Messages.GAME_OVER);
 		}

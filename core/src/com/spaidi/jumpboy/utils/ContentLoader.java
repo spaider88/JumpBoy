@@ -44,6 +44,17 @@ public class ContentLoader {
 	public Animation walkLeftAnimation;
 	public Animation walkRightAnimation;
 
+	private static ContentLoader instance = null;
+
+	private ContentLoader() {}
+
+	public static ContentLoader getInstance() {
+		if (instance == null) {
+			instance = new ContentLoader();
+		}
+		return instance;
+	}
+
 	public void loadContent() {
 		loadTextures();
 		loadSounds();

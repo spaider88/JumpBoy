@@ -19,6 +19,7 @@ import com.spaidi.jumpboy.actors.blocks.Exit;
 import com.spaidi.jumpboy.actors.jumpboy.JumpBoy;
 import com.spaidi.jumpboy.actors.jumpboy.JumpBoy.State;
 import com.spaidi.jumpboy.constants.CollisionTypes;
+import com.spaidi.jumpboy.utils.ContentLoader;
 
 public class WorldController {
 
@@ -318,7 +319,7 @@ public class WorldController {
 			cam.position.set(jumpBoy.getPosition().x, jumpBoy.getPosition().y, 0);
 			if (keys.get(Keys.JUMP)) {
 				if (!jumpBoy.getState().equals(State.JUMPING)) {
-					Array<Sound> jumpSounds = world.getContentLoader().jumpSounds;
+					Array<Sound> jumpSounds = ContentLoader.getInstance().jumpSounds;
 					jumpSounds.get(new Random().nextInt(jumpSounds.size)).play();
 					jumpingPressed = true;
 					jumpPressedTime = System.currentTimeMillis();
