@@ -10,15 +10,18 @@ import com.spaidi.jumpboy.JumpBoyGame;
 import com.spaidi.jumpboy.utils.ContentLoader;
 import com.spaidi.jumpboy.utils.Rendering;
 
-public class SplashScreen implements Screen, InputProcessor {
+public class AboutScreen implements Screen, InputProcessor {
 
-	private float elapsedTime = 0.0f;
+	private JumpBoyGame game = null;
 
-	private JumpBoyGame game = null;;
+	private final String ABOUT = "About:";
+	private final String AUTHOR = "Author: $pa!d!";
+	private final String DATE = "Date: 2016";
+	private final String GDX = "Powered by GDX";
 
-	private SpriteBatch textSpriteBatch = null;;
+	private SpriteBatch textSpriteBatch = null;
 
-	public SplashScreen(JumpBoyGame game) {
+	public AboutScreen(JumpBoyGame game) {
 		this.game = game;
 	}
 
@@ -42,12 +45,12 @@ public class SplashScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		dispose();
 		return false;
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		dispose();
 		return false;
 	}
 
@@ -70,28 +73,23 @@ public class SplashScreen implements Screen, InputProcessor {
 	public void show() {
 		Gdx.input.setInputProcessor(this);
 		textSpriteBatch = new SpriteBatch();
-		ContentLoader.getInstance().loadContent();
 	}
 
 	@Override
 	public void render(float delta) {
-		elapsedTime += delta;
 		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		String textToDisplay;
 		textSpriteBatch.begin();
-		if (elapsedTime < 0.8f) {
-			textToDisplay = "Welcome...";
-		} else if (elapsedTime < 1.6f) {
-			textToDisplay = "to...";
-		} else if (elapsedTime < 5.0f) {
-			textToDisplay = "JumpBoy";
-		} else {
-			textToDisplay = "Click or tap to play...";
-		}
-		ContentLoader.getInstance().gameFont.draw(textSpriteBatch, textToDisplay, 320 - Rendering.calculateTextWidth(
-				textToDisplay), 240);
+		ContentLoader.getInstance().gameFont.getData().setScale(1.0f);
+		renderText(ABOUT, Rendering.calculateVerticallyCenterTextWidth(ABOUT), 0.80f);
+		renderText(AUTHOR, 100, 0.60f);
+		renderText(DATE, 100, 0.40f);
+		renderText(GDX, Rendering.calculateVerticallyCenterTextWidth(GDX), 0.20f);
 		textSpriteBatch.end();
+	}
+
+	private void renderText(final String text, final float x, final float y) {
+		ContentLoader.getInstance().gameFont.draw(textSpriteBatch, text, x, y * Gdx.graphics.getHeight());
 	}
 
 	@Override
@@ -110,5 +108,4 @@ public class SplashScreen implements Screen, InputProcessor {
 	public void dispose() {
 		game.setScreen(new MainMenuScreen(game));
 	}
-
 }

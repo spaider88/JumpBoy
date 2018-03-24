@@ -108,7 +108,9 @@ public class WorldController {
 
 	public void jumpReleased() {
 		keys.put(Keys.JUMP, false);
-		jumpingPressed = false;
+		if (!keys.get(Keys.ALT)) {
+			jumpingPressed = false;
+		}
 	}
 
 	public void downReleased() {
@@ -302,7 +304,9 @@ public class WorldController {
 	/** Change JumpBoy's state and parameters based on input controls **/
 	private boolean processInput() {
 		if (keys.get(Keys.ALT)) {
-			jumpBoy.setState(State.IDLE);
+			if (jumpBoy.getState().equals(State.WALKING)) {
+				jumpBoy.setState(State.IDLE);
+			}
 			if (keys.get(Keys.LEFT)) {
 				cam.position.x -= MAX_CAM_SPEED;
 			}

@@ -94,8 +94,7 @@ public class MainMenuScreen implements Screen, InputProcessor {
 
 		menuStage = new Stage();
 		buttonsTable = new Table();
-		buttonsTable.setBounds(0, -0.25f * Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics
-				.getHeight());
+		buttonsTable.setBounds(0, -0.25f * Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
 		buttonsStyle = new TextButtonStyle();
 		buttonsStyle.font = ContentLoader.getInstance().gameFont;
@@ -110,6 +109,12 @@ public class MainMenuScreen implements Screen, InputProcessor {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				game.setScreen(game.getGameScreen());
+			}
+		});
+		aboutBtn.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				game.setScreen(new AboutScreen(game));
 			}
 		});
 		exitBtn.addListener(new ClickListener() {
